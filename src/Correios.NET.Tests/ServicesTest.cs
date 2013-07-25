@@ -9,7 +9,7 @@ namespace Correios.NET.Tests
         [Fact]
         public void PackageService_ShouldReturn_Statuses()
         {
-            const string packageCode = "SW552251144BR";
+            const string packageCode = "SW000000000BR";
             var services = new Services();
             var result = services.GetPackageTracking(packageCode);
 
