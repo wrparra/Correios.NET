@@ -38,6 +38,9 @@
     <Reference Include="FluentAssertions">
       <HintPath>..\packages\FluentAssertions.2.0.1\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
@@ -54,6 +57,8 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Models\PackageTest.cs" />
+    <Compile Include="Models\ResourcesReader.cs" />
     <Compile Include="ServicesTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -65,6 +70,12 @@
       <Project>{a3a5fb3d-8f01-4f6d-8114-715ba075872a}</Project>
       <Name>Correios.NET</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\PacoteNaoEncontrado.html" />
+    <EmbeddedResource Include="Resources\Pacote.html" />
+    <EmbeddedResource Include="Resources\PacoteEntregue.html" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

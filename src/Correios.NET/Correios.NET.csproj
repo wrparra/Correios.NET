@@ -46,6 +46,7 @@
     <Reference Include="System.Net.Http.WebRequest" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\ParseException.cs" />
     <Compile Include="IServices.cs" />
     <Compile Include="Models\Package.cs" />
     <Compile Include="Services.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Correios.NET.Exceptions;
 using CsQuery;
 
 namespace Correios.NET.Models
@@ -25,7 +26,7 @@ namespace Correios.NET.Models
         {
             get { return Statuses.Any() && CurrentStatus.Situation.Equals("Entregue"); }
         }
-        
+
         public void AddStatus(DateTime date, string location, string status, string details)
         {
             AddStatus(new PackageStatus
@@ -49,35 +50,42 @@ namespace Correios.NET.Models
 
         public static Package Parse(string html)
         {
-            CQ dom = html;
-            var packageCode = ParsePackageCode(dom);
-            var package = new Package(packageCode);
-            PackageStatus status = null;
-
-            var tableRows = dom.Select("table tr");
-            foreach (var columns in tableRows.Skip(1).Select(tableRow => tableRow.ChildElements.ToList()))
+            try
             {
-                if (columns.Count == 3)
+                CQ dom = html;
+                var packageCode = ParsePackageCode(dom);
+                var package = new Package(packageCode);
+                PackageStatus status = null;
+
+                var tableRows = dom.Select("table tr");
+                foreach (var columns in tableRows.Skip(1).Select(tableRow => tableRow.ChildElements.ToList()))
                 {
-                    status = new PackageStatus();
-                    if (columns[0].HasAttribute("rowspan"))
+                    if (columns.Count == 3)
                     {
-                        status.Date = DateTime.Parse(columns[0].InnerText);
+                        status = new PackageStatus();
+                        if (columns[0].HasAttribute("rowspan"))
+                        {
+                            status.Date = DateTime.Parse(columns[0].InnerText);
+                        }
+
+                        status.Location = columns[1].InnerText;
+                        status.Situation = columns[2].InnerText;
+
+                        package.AddStatus(status);
                     }
-
-                    status.Location = columns[1].InnerText;
-                    status.Situation = columns[2].InnerText;
-
-                    package.AddStatus(status);
+                    else
+                    {
+                        if (status != null)
+                            status.Details = columns[0].InnerText;
+                    }
                 }
-                else
-                {
-                    if (status != null)
-                        status.Details = columns[0].InnerText;
-                }
+
+                return package;
             }
-
-            return package;
+            catch (Exception ex)
+            {
+                throw new ParseException("Não foi possível converter o pacote/encomenda.", ex);
+            }
         }
 
         private static string ParsePackageCode(CQ dom)
@@ -85,8 +93,8 @@ namespace Correios.NET.Models
             var title = dom["body b"].First().Text();
             if (string.IsNullOrEmpty(title))
                 return string.Empty;
-            
-            var titleArray = title.Split(new[] {'-'});
+
+            var titleArray = title.Split(new[] { '-' });
             return titleArray.Length > 0 ? titleArray[0].Replace("\n", string.Empty).Trim() : string.Empty;
         }
     }
