@@ -15,12 +15,14 @@ namespace Correios.NET.Tests.Models
         private readonly string _packageHtml;
         private readonly string _packageDeliveredHtml;
         private readonly string _packageErrorHtml;
+        private readonly string _packageCodeNotFound;
 
         public PackageTest()
         {
             _packageHtml = ResourcesReader.GetResourceAsString("Pacote.html");
             _packageDeliveredHtml = ResourcesReader.GetResourceAsString("PacoteEntregue.html");
             _packageErrorHtml = ResourcesReader.GetResourceAsString("PacoteNaoEncontrado.html");
+            _packageCodeNotFound = ResourcesReader.GetResourceAsString("PacoteSemCodigo.html");
         }
 
         [Fact]
@@ -42,8 +44,14 @@ namespace Correios.NET.Tests.Models
         public void PackageParse_ShouldThrowAnParseException()
         {
             Action act = () => Package.Parse(_packageErrorHtml);
-            act.ShouldThrow<ParseException>()
-                .WithMessage("Não foi possível converter o pacote/encomenda.");
+            act.ShouldThrow<ParseException>();
+        }
+
+        [Fact]
+        public void PackageParse_ShouldThrowAnParseExceptionCodeNotFound()
+        {
+            Action act = () => Package.Parse(_packageCodeNotFound);
+            act.ShouldThrow<ParseException>().WithMessage("Código da encomenda/pacote não foi encontrado.");
         }
     }
 }

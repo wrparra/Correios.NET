@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Correios.NET.Exceptions;
+using Correios.NET.Extensions;
 using CsQuery;
 
 namespace Correios.NET.Models
@@ -24,7 +26,7 @@ namespace Correios.NET.Models
 
         public bool IsDelivered
         {
-            get { return Statuses.Any() && CurrentStatus.Situation.Equals("Entregue"); }
+            get { return Statuses.Any() && CurrentStatus.Situation.Equals("Entrega Efetuada"); }
         }
 
         public void AddStatus(DateTime date, string location, string status, string details)
@@ -48,16 +50,25 @@ namespace Correios.NET.Models
             return Code;
         }
 
+        /// <summary>
+        /// Parse and converts the html page in a package
+        /// </summary>
+        /// <param name="html">html page</param>
+        /// <returns>A Package</returns>
+        /// <exception cref="Correios.NET.Exceptions.ParseException"></exception>
         public static Package Parse(string html)
         {
+            CQ dom = html;
+            var packageCode = ParsePackageCode(dom);
+            var package = new Package(packageCode);
+            PackageStatus status = null;
+
+            var tableRows = dom.Select("table tr");
+            if (tableRows.Length == 0)
+                throw new ParseException(dom.Select("p").Text().RemoveLineEndings());
+
             try
             {
-                CQ dom = html;
-                var packageCode = ParsePackageCode(dom);
-                var package = new Package(packageCode);
-                PackageStatus status = null;
-
-                var tableRows = dom.Select("table tr");
                 foreach (var columns in tableRows.Skip(1).Select(tableRow => tableRow.ChildElements.ToList()))
                 {
                     if (columns.Count == 3)
@@ -79,23 +90,23 @@ namespace Correios.NET.Models
                             status.Details = columns[0].InnerText;
                     }
                 }
-
-                return package;
             }
             catch (Exception ex)
             {
                 throw new ParseException("Não foi possível converter o pacote/encomenda.", ex);
             }
+
+            return package;
         }
 
         private static string ParsePackageCode(CQ dom)
         {
-            var title = dom["body b"].First().Text();
-            if (string.IsNullOrEmpty(title))
-                return string.Empty;
+            var code = dom["input[name=P_ITEMCODE]"].Val();
 
-            var titleArray = title.Split(new[] { '-' });
-            return titleArray.Length > 0 ? titleArray[0].Replace("\n", string.Empty).Trim() : string.Empty;
+            if (string.IsNullOrEmpty(code))
+                throw new ParseException("Código da encomenda/pacote não foi encontrado.");
+
+            return code;
         }
     }
 

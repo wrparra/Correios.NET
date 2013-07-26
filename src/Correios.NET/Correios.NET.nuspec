@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>Correios.NET</id>
+        <version>0.8.3-prerelease</version>
+        <title>Correios.NET</title>
+        <authors>Wellington R. Parra</authors>
+		<owners>Wellington R. Parra</owners>
+        <licenseUrl>https://github.com/wrparra/Correios.NET/blob/master/LICENSE.txt</licenseUrl>
+        <projectUrl>https://github.com/wrparra/Correios.NET</projectUrl>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+		<summary>API .NET para consumo de serviços dos correios.</summary>
+        <description>API .NET para consumo de serviços dos correios.</description>
+        <copyright>Copyright 2013</copyright>
+        <language>pt-BR</language>
+        <tags>correios encomendas</tags>
+        <dependencies>
+            <group targetFramework=".NETFramework4.5">
+                <dependency id="Microsoft.Net.Http" version="2.2.13" />
+                <dependency id="CsQuery" version="1.3.5-beta5" />
+            </group>
+        </dependencies>
+    </metadata>
+    <files>
+		<file src="bin\release\Correios.NET.dll" target="lib\net45" />
+		<file src="bin\release\Correios.NET.xml" target="lib\net45" />
+		<file src="bin\release\Correios.NET.pdb" target="lib\net45" />
+	</files>
+</package>
