@@ -6,18 +6,38 @@ Como usar
 -------------------------
 Para instalar o Correios.NET, execute o seguinte comando no Package Manager Console.
 
-	PM> Install-Package Correios.NET
+	PM> Install-Package Correios.NET -pre
 
 
 Rastreamento de encomendas/pacotes
 -------------------------
-	//exemplo usando o método sync
-	var result = new Correios.NET.Services().GetPackageTracking("SW000000000BR");
+Exemplo utilizando Console App com método sync
 
-	foreach (var status in result.Statuses)
-	{
-		Console.WriteLine("{0:dd/MM/yyyy HH:mm} - {1} - {2} - {3}", status.Date, status.Location, status.Situation, status.Details);
-	}
+	class Program
+    {
+        static void Main(string[] args)
+        {
+            var result = new Correios.NET.Services().GetPackageTracking("SW000000000BR");
+
+            foreach (var status in result.Statuses)
+                Console.WriteLine("{0:dd/MM/yyyy HH:mm} - {1} - {2} - {3}", status.Date, status.Location, status.Situation, status.Details);
+
+            Console.ReadLine();
+        }
+    }
+	
+Exemplo utilizando ASP.NET MVC com método async
+
+	public class HomeController : AsyncController
+    {
+        public async Task<ActionResult> Index()
+        {
+            var package = new Correios.NET.Services().GetPackageTrackingAsync("SW000000000BR");
+            await Task.WhenAll(package);
+            ViewBag.TrackingCode = package.Result.Code;
+            return View();
+        }
+    }
 
 Roadmap
 -------------------------
