@@ -10,45 +10,59 @@ namespace Correios.NET.Models
 {
     public class Package
     {
+        private const string DELIVERED_STATUS = "Entrega Efetuada";
+
+        private string _code;
+
         public Package(string code)
         {
-            Code = code;
-            Statuses = new List<PackageStatus>();
+            SetCode(code);
+            TrackingHistory = new List<PackageTracking>();
         }
 
-        public string Code { get; private set; }
-        public IList<PackageStatus> Statuses { get; private set; }
+        #region Properties
 
-        public PackageStatus CurrentStatus
+        public string Code { get { return _code; } }
+        public IList<PackageTracking> TrackingHistory { get; private set; }
+        public PackageTracking CurrentStatus { get { return TrackingHistory.FirstOrDefault(); } }
+        public DateTime? DeliveryDate { get { return IsDelivered ? CurrentStatus.Date : default(DateTime?); } }
+        public DateTime? ShipDate { get { return TrackingHistory.Last().Date; } }
+        public bool IsDelivered { get { return IsValid && CurrentStatus.Status.Equals(DELIVERED_STATUS); } }
+        public bool IsValid { get { return TrackingHistory.Any(); } }
+
+        #endregion
+
+        #region Methods
+
+        private void SetCode(string code)
         {
-            get { return Statuses.FirstOrDefault(); }
+            if (string.IsNullOrEmpty(code) || code.Length != 13)
+                throw new ArgumentException("Código de objeto inválido.");
+
+            _code = code;
         }
 
-        public bool IsDelivered
+        private void AddTrackingInfo(PackageTracking tracking)
         {
-            get { return Statuses.Any() && CurrentStatus.Situation.Equals("Entrega Efetuada"); }
+            TrackingHistory.Add(tracking);
         }
 
-        public void AddStatus(DateTime date, string location, string status, string details)
+        private void AddTrackingInfo(IEnumerable<PackageTracking> list)
         {
-            AddStatus(new PackageStatus
-                      {
-                          Date = date,
-                          Location = location,
-                          Situation = status,
-                          Details = details
-                      });
-        }
-
-        public void AddStatus(PackageStatus status)
-        {
-            Statuses.Add(status);
+            foreach (var item in list)
+            {
+                AddTrackingInfo(item);
+            }
         }
 
         public override string ToString()
         {
             return Code;
         }
+
+        #endregion
+
+        #region Parse Methods
 
         /// <summary>
         /// Parse and converts the html page in a package
@@ -61,8 +75,25 @@ namespace Correios.NET.Models
             CQ dom = html;
             var packageCode = ParsePackageCode(dom);
             var package = new Package(packageCode);
-            PackageStatus status = null;
+            package.AddTrackingInfo(ParseTrackingInfo(dom));
+            return package;
+        }
 
+        private static string ParsePackageCode(CQ dom)
+        {
+            var code = dom["input[name=P_ITEMCODE]"].Val();
+
+            if (string.IsNullOrEmpty(code))
+                throw new ParseException("Código da encomenda/pacote não foi encontrado.");
+
+            return code;
+        }
+
+        private static IList<PackageTracking> ParseTrackingInfo(CQ dom)
+        {
+            var tracking = new List<PackageTracking>();
+
+            PackageTracking status = null;
             var tableRows = dom.Select("table tr");
             if (tableRows.Length == 0)
                 throw new ParseException(dom.Select("p").Text().RemoveLineEndings());
@@ -73,16 +104,16 @@ namespace Correios.NET.Models
                 {
                     if (columns.Count == 3)
                     {
-                        status = new PackageStatus();
+                        status = new PackageTracking();
                         if (columns[0].HasAttribute("rowspan"))
                         {
                             status.Date = DateTime.Parse(columns[0].InnerText);
                         }
 
                         status.Location = columns[1].InnerText;
-                        status.Situation = columns[2].InnerText;
+                        status.Status = columns[2].InnerText;
 
-                        package.AddStatus(status);
+                        tracking.Add(status);
                     }
                     else
                     {
@@ -96,30 +127,23 @@ namespace Correios.NET.Models
                 throw new ParseException("Não foi possível converter o pacote/encomenda.", ex);
             }
 
-            return package;
+            return tracking;
         }
 
-        private static string ParsePackageCode(CQ dom)
-        {
-            var code = dom["input[name=P_ITEMCODE]"].Val();
+        #endregion
 
-            if (string.IsNullOrEmpty(code))
-                throw new ParseException("Código da encomenda/pacote não foi encontrado.");
-
-            return code;
-        }
     }
 
-    public class PackageStatus
+    public class PackageTracking
     {
         public DateTime Date { get; set; }
         public string Location { get; set; }
-        public string Situation { get; set; }
+        public string Status { get; set; }
         public string Details { get; set; }
 
         public override string ToString()
         {
-            return string.Format("{0:dd/MM/yyyy HH:mm} - {1} - {2}", Date, Location, Situation);
+            return string.Format("{0:dd/MM/yyyy HH:mm} - {1} - {2}", Date, Location, Status);
         }
 
     }

@@ -30,6 +30,10 @@ namespace Correios.NET.Tests.Models
         {
             var package = Package.Parse(_packageHtml);
             package.Code.Should().NotBeNullOrEmpty();
+            package.IsValid.Should().BeTrue();
+            package.ShipDate.Should().Be(DateTime.Parse("24/07/2013 16:06:00"));
+            package.IsDelivered.Should().BeFalse();
+            package.DeliveryDate.HasValue.Should().BeFalse();
         }
 
         [Fact]
@@ -37,7 +41,10 @@ namespace Correios.NET.Tests.Models
         {
             var package = Package.Parse(_packageDeliveredHtml);
             package.Code.Should().NotBeNullOrEmpty();
+            package.IsValid.Should().BeTrue();
             package.IsDelivered.Should().BeTrue();
+            package.ShipDate.Should().Be(DateTime.Parse("24/07/2013 16:06:00"));
+            package.DeliveryDate.Should().Be(DateTime.Parse("25/07/2013 18:03:00"));
         }
 
         [Fact]

@@ -19,8 +19,8 @@ Exemplo utilizando Console App com método sync
         {
             var result = new Correios.NET.Services().GetPackageTracking("SW000000000BR");
 
-            foreach (var status in result.Statuses)
-                Console.WriteLine("{0:dd/MM/yyyy HH:mm} - {1} - {2} - {3}", status.Date, status.Location, status.Situation, status.Details);
+            foreach (var track in result.TrackingHistory)
+                Console.WriteLine("{0:dd/MM/yyyy HH:mm} - {1} - {2} - {3}", track.Date, track.Location, track.Status, track.Details);
 
             Console.ReadLine();
         }

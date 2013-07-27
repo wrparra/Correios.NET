@@ -30,7 +30,7 @@ namespace Correios.NET.Tests
             var result = services.GetPackageTracking(packageCode);
 
             result.Code.Should().Be(packageCode);
-            result.Statuses.Count.Should().BeGreaterThan(0);
+            result.TrackingHistory.Count.Should().BeGreaterThan(0);
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace Correios.NET.Tests
             var result = services.Object.GetPackageTracking(packageCode);
 
             result.Code.Should().Be(packageCode);
-            result.Statuses.Should().HaveCount(3);
+            result.TrackingHistory.Should().HaveCount(3);
         }
 
         [Fact]
