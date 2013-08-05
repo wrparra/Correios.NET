@@ -60,5 +60,15 @@ namespace Correios.NET.Tests
             result.Code.Should().Be(packageCode);
             result.IsDelivered.Should().BeTrue();
         }
+
+        [Fact]
+        public void AddressService_ShouldReturnAddress()
+        {
+            const string zipCode = "15041593";
+            var services = new Services();
+            var result = services.GetAddress(zipCode);
+            result.ZipCode.Should().Be(zipCode);
+
+        }
     }
 }

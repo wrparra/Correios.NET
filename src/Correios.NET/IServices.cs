@@ -7,5 +7,8 @@ namespace Correios.NET
     {
         Task<Package> GetPackageTrackingAsync(string packageCode);
         Package GetPackageTracking(string packageCode);
+
+        Task<Address> GetAddressAsync(string zipCode);
+        Address GetAddress(string zipCode);
     }
 }

@@ -52,6 +52,7 @@
     <Compile Include="Exceptions\ParseException.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="IServices.cs" />
+    <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Package.cs" />
     <Compile Include="Services.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
