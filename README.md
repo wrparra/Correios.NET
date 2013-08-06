@@ -39,14 +39,41 @@ Exemplo utilizando ASP.NET MVC com método async
         }
     }
 
+Consulta de Endereços por CEP
+-------------------------
+Exemplo utilizando Console App com método sync
+
+	class Program
+    {
+        static void Main(string[] args)
+        {
+            var address = new Correios.NET.Services().GetAddress("15000000");
+            Console.WriteLine("{0} - {1} - {2} - {3}/{4}", address.ZipCode, address.Street, address.District, address.City, address.State);
+            Console.ReadLine();
+        }
+    }
+	
+Exemplo utilizando ASP.NET MVC com método async
+
+	public class HomeController : AsyncController
+    {
+        public async Task<ActionResult> Index()
+        {
+            var address = new Correios.NET.Services().GetAddressAsync("15000000");
+            await Task.WhenAll(address);
+            ViewBag.Street = address.Result.Street;
+            return View();
+        }
+    }
+
+	
 Roadmap
 -------------------------
 Próximas implementações
 
 1. Cálculo de Frete
-2. Busca CEP
-3. Busca CEP por Logradouro
-4. e outros... ( http://www.correios.com.br/webservices/ )
+2. Busca CEP por Logradouro
+3. e outros... ( http://www.correios.com.br/webservices/ )
 	
 Contato
 -------------------------
