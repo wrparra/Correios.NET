@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<!-- saved from url=(0050)http://m.correios.com.br/movel/buscaCepConfirma.do -->
+<html lang="pt"><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		
+		<!-- Meta usado no site da globo: <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> -->
+		
+		<script type="text/javascript" src="./Endereco_files/jquery-1.4.2.min.js"></script>
+		
+		<script language="JavaScript" src="./Endereco_files/template.js" type="text/javascript"></script> 
+		<script language="JavaScript" src="./Endereco_files/aplicacao.js" type="text/javascript"></script>
+		 
+		 
+		<link rel="stylesheet" type="text/css" href="./Endereco_files/template.css">
+		<link rel="stylesheet" type="text/css" href="./Endereco_files/aplicacao.css">
+		<title>Correios Mobile</title>
+		<link rel="icon" href="http://m.correios.com.br/movel/images/template/icon.png" type="image/png">		
+	<style type="text/css"></style></head>
+	<body>
+		<div id="divTelaAguarde">
+	<center>
+		<span class="style1"><br><br><br><br><br><br><br><br><br><img src="./Endereco_files/62x62.gif"><br></span>
+		<span class="item">&nbsp;&nbsp;Aguarde...</span>
+	</center>
+</div>
+
+		<div class="container">
+			<div class="fundo">
+				<div>
+					<a href="http://m.correios.com.br/movel/index.do" class="logo"></a>
+				</div>
+				
+
+
+
+<script>
+    function anterior()
+    {
+        _mostraTelaAguarde();
+        $('#metodo').val('anterior');
+        $('#frmCep').submit();
+    }
+
+    function proximo()
+    {
+        _mostraTelaAguarde();
+        $('#metodo').val('proximo');
+        $('#frmCep').submit();
+    }
+</script>
+<div class="conteudo">
+    <div class="secao">Busca CEP - Endereço</div><br>
+
+    <form name="buscaCepForm" method="post" action="./Endereco_files/Endereco.htm" id="frmCep">
+
+		Logradouro <b>1 - 1</b> de <b>1</b>
+        
+        
+            
+                
+                <div class="caixacampobranco">
+                    
+                        
+
+                        
+                            <span class="resposta">Logradouro: </span>
+                            <span class="respostadestaque">
+                                Rua de Teste
+                                
+                            </span><br>
+                            <span class="resposta">Bairro: </span><span class="respostadestaque">Bairro de Teste</span><br>
+                            <span class="resposta">Localidade / UF: </span>
+                            <span class="respostadestaque">
+                                São José do Rio Preto
+                                
+								/SP
+                                
+                            </span><br>
+                            <span class="resposta">CEP: </span><span class="respostadestaque">15000000</span><br>
+                        
+
+                        
+
+                        
+
+                        
+
+                        
+                        <div style="text-align: right;" class="mopcoes orientacao"><span>Opções <img style="position: relative right:0px;" src="./Endereco_files/mais.png"></span></div>
+
+                    </div>
+                    <div class="divopcoes" style="display: block;">
+                        
+                            <!-- Para usuários originários do Busca CEP -->
+                            <div> Simule um envio utilizando <br> o CEP <strong>15041593</strong> como:</div>
+                            <ul>
+                                <li>
+                                    <a onclick="retornarParaPrecos(&#39;15041593&#39;,&#39;1&#39;);">CEP Origem <img src="./Endereco_files/cep_r.png"></a>
+                                </li>
+                                <li>
+                                    <a onclick="retornarParaPrecos(&#39;15041593&#39;,&#39;2&#39;);"><img src="./Endereco_files/cep_d.png">CEP Destino</a>
+                                </li>
+                            </ul>
+                        
+
+                        
+                    </div>
+                
+            
+
+            <div class="botoes">
+                <div class="iconeesq">
+                    
+                        <a href="http://m.correios.com.br/movel/buscaCep.do"><img src="./Endereco_files/seta-esquerda.gif"><span class="nav">&nbsp;Nova Consulta</span></a>
+                        
+                        
+                </div>
+                
+                
+                <br class="clr">
+                <input type="hidden" name="metodo" value="buscarCep" id="metodo">
+                <input type="hidden" name="numPagina" value="1">
+                <input type="hidden" name="regTotal" value="1">
+                <input type="hidden" name="cepEntrada" value="15041593" id="cepEntrada">
+                <input type="hidden" name="tipoCep" value="" id="tipoCep">
+                <input type="hidden" name="cepTemp" value="" id="cepTemp">
+            </div>
+
+        </form>
+
+    </div>
+    <script>
+	
+        $('document').ready(function(){
+            $('div div.mopcoes span').click(function(){
+                $(this).parents().next('div.divopcoes').slideToggle(500);
+            });
+        });
+
+        function retornarParaPrecos(pCepSelecionado, pTipoCep)
+        {
+            var tipoCep=null;
+
+            if(pTipoCep==null)
+            {
+                tipoCep=$('#tipoCep').val();
+            }
+            else
+            {
+                tipoCep=pTipoCep;
+            }
+            var cepOrigem;
+            var cepDestino;
+            if(tipoCep!=null)
+            {
+                switch(tipoCep)
+                {
+                    case "1":
+                        cepOrigem=pCepSelecionado;
+                        cepDestino=$('#cepTemp').val();
+                        break;
+					
+                    case "2":
+                        cepOrigem=$('#cepTemp').val();
+                        cepDestino=pCepSelecionado;
+                        break;
+                }
+
+                $('#cepOrigem').val(cepOrigem);
+                $('#cepDestino').val(cepDestino);
+
+                $('#calcularPrecos').submit();
+            }
+        }
+
+
+    </script>
+
+    <form name="precoForm" method="post" action="http://m.correios.com.br/movel/precos.do" id="calcularPrecos">
+        <input type="hidden" name="cepOrigem" value="" id="cepOrigem">
+        <input type="hidden" name="cepDestino" value="" id="cepDestino">
+    </form>
+    <form name="buscaCepForm" method="post" action="http://m.correios.com.br/movel/buscaCep.do" id="buscaCepInicio">
+        <input type="hidden" name="cepEntrada" value="15041593" class="comptotal">
+        <input type="hidden" name="tipoCep" value="" id="tipoCep">
+        <input type="hidden" name="cepTemp" value="" id="cepTemp">
+    </form>
+
+
+				<br>
+			</div>
+			<div class="rodape">
+				&nbsp;
+<a href="http://m.correios.com.br/movel/faleCorreios.do">
+    <img src="./Endereco_files/fcc.gif" align="absmiddle">
+    <span class="orientacao">&nbsp;Fale com os Correios</span>
+</a> | 
+<a href="http://www.correios.com.br/">
+    <span class="orientacao">&nbsp;Versão clássica</span>
+</a><br>
+
+<div class="textorodape">© Copyright 2013 Correios - Todos os direitos reservados</div>
+			</div>
+		</div>
+	
+
+<div id="window-resizer-tooltip" style="display: block;"><a href="http://m.correios.com.br/movel/buscaCepConfirma.do#" title="Edit settings" style="background-image: url(chrome-extension://kkelicaakdanhinjdeammmilcgefonfh/images/icon_19.png);"></a><span class="tooltipTitle">Window size: </span><span class="tooltipWidth" id="winWidth">1366</span> x <span class="tooltipHeight" id="winHeight">728</span><br><span class="tooltipTitle">Viewport size: </span><span class="tooltipWidth" id="vpWidth">1366</span> x <span class="tooltipHeight" id="vpHeight">394</span></div></body></html>

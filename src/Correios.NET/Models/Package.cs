@@ -89,7 +89,7 @@ namespace Correios.NET.Models
             return code;
         }
 
-        private static IList<PackageTracking> ParseTrackingInfo(CQ dom)
+        private static IEnumerable<PackageTracking> ParseTrackingInfo(CQ dom)
         {
             var tracking = new List<PackageTracking>();
 

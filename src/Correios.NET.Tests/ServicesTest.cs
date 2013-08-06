@@ -11,15 +11,13 @@ namespace Correios.NET.Tests
     {
         private readonly string _packageHtml;
         private readonly string _packageDeliveredHtml;
-        private readonly string _packageErrorHtml;
-        private readonly string _packageCodeNotFound;
+        private readonly string _addressHtml;
 
         public ServicesTest()
         {
             _packageHtml = ResourcesReader.GetResourceAsString("Pacote.html");
             _packageDeliveredHtml = ResourcesReader.GetResourceAsString("PacoteEntregue.html");
-            _packageErrorHtml = ResourcesReader.GetResourceAsString("PacoteNaoEncontrado.html");
-            _packageCodeNotFound = ResourcesReader.GetResourceAsString("PacoteSemCodigo.html");
+            _addressHtml = ResourcesReader.GetResourceAsString("Endereco.html");
         }
 
         [Fact(Timeout = 5000)]
@@ -64,11 +62,18 @@ namespace Correios.NET.Tests
         [Fact]
         public void AddressService_ShouldReturnAddress()
         {
-            const string zipCode = "15041593";
-            var services = new Services();
-            var result = services.GetAddress(zipCode);
-            result.ZipCode.Should().Be(zipCode);
+            const string zipCode = "15000000";
+            var services = new Moq.Mock<IServices>();
 
+            services.Setup(s => s.GetAddress(zipCode))
+                .Returns(Address.Parse(_addressHtml));
+
+            var result = services.Object.GetAddress(zipCode);
+            result.ZipCode.Should().Be(zipCode);
+            result.Street.Should().Be("Rua de Teste");
+            result.District.Should().Be("Bairro de Teste");
+            result.City.Should().Be("São José do Rio Preto");
+            result.State.Should().Be("SP");
         }
     }
 }

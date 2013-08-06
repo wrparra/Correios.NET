@@ -59,6 +59,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Models\AddressTest.cs" />
     <Compile Include="Models\PackageTest.cs" />
     <Compile Include="ResourcesReader.cs" />
     <Compile Include="ServicesTest.cs" />
@@ -80,6 +81,12 @@
     <EmbeddedResource Include="Resources\PacoteNaoEncontrado.html" />
     <EmbeddedResource Include="Resources\Pacote.html" />
     <EmbeddedResource Include="Resources\PacoteEntregue.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Endereco.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\EnderecoNaoEncontrado.html" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
