@@ -23,7 +23,7 @@ namespace Correios.NET.Tests
         [Fact(Timeout = 5000)]
         public void PackageTrackingService_ShouldReturnCodeAndStatuses()
         {
-            const string packageCode = "SW552251158BR";
+            const string packageCode = "RC425512766HK";
             IServices services = new Services();
             var result = services.GetPackageTracking(packageCode);
 
@@ -48,7 +48,7 @@ namespace Correios.NET.Tests
         [Fact]
         public void PackageTrackingService_ShouldBeDelivered()
         {
-            const string packageCode = "SW552251144BR";
+            const string packageCode = "RC257589899CN";
             var services = new Moq.Mock<IServices>();
             services.Setup(s => s.GetPackageTracking(packageCode))
                 .Returns(Package.Parse(_packageDeliveredHtml));

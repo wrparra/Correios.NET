@@ -24,10 +24,10 @@ namespace Correios.NET.Models
 
         public string Code { get { return _code; } }
         public IList<PackageTracking> TrackingHistory { get; private set; }
-        public PackageTracking CurrentStatus { get { return TrackingHistory.FirstOrDefault(); } }
-        public DateTime? DeliveryDate { get { return IsDelivered ? CurrentStatus.Date : default(DateTime?); } }
+        public PackageTracking LastStatus { get { return TrackingHistory.FirstOrDefault(); } }
+        public DateTime? DeliveryDate { get { return IsDelivered ? GetDeliveryStatus().Date : default(DateTime?); } }
         public DateTime? ShipDate { get { return TrackingHistory.Last().Date; } }
-        public bool IsDelivered { get { return IsValid && CurrentStatus.Status.Equals(DELIVERED_STATUS); } }
+        public bool IsDelivered { get { return IsValid && GetDeliveryStatus() != null; } }
         public bool IsValid { get { return TrackingHistory.Any(); } }
 
         #endregion
@@ -53,6 +53,11 @@ namespace Correios.NET.Models
             {
                 AddTrackingInfo(item);
             }
+        }
+
+        private PackageTracking GetDeliveryStatus()
+        {
+            return TrackingHistory.FirstOrDefault(t => t.Status.Equals(DELIVERED_STATUS));
         }
 
         public override string ToString()
