@@ -20,15 +20,27 @@ namespace Correios.NET.Tests
             _addressHtml = ResourcesReader.GetResourceAsString("Endereco.html");
         }
 
-        [Fact(Timeout = 5000)]
-        public void PackageTrackingService_ShouldReturnCodeAndStatuses()
+        [Fact]
+        public void PackageTrackingService_Live_ShouldReturnCodeAndStatuses()
         {
-            const string packageCode = "RC425512766HK";
+            const string packageCode = "PI788857395BR";
             IServices services = new Services();
             var result = services.GetPackageTracking(packageCode);
 
             result.Code.Should().Be(packageCode);
             result.TrackingHistory.Count.Should().BeGreaterThan(0);
+        }
+
+        [Fact]
+        public void AddressService_Live_ShouldReturnAddress()
+        {
+            const string zipCode = "15025000";
+            IServices services = new Services();
+            var result = services.GetAddress(zipCode);
+
+            result.ZipCode.Should().Be(zipCode);
+            result.City.Should().Be("São José do Rio Preto");
+            result.State.Should().Be("SP");
         }
 
         [Fact]
