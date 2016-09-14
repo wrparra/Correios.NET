@@ -1,7 +1,4 @@
-﻿using System;
-using Correios.NET.Exceptions;
-using Correios.NET.Models;
-using Correios.NET.Tests.Models;
+﻿using Correios.NET.Models;
 using FluentAssertions;
 using Xunit;
 
@@ -23,7 +20,7 @@ namespace Correios.NET.Tests
         [Fact]
         public void PackageTrackingService_Live_ShouldReturnCodeAndStatuses()
         {
-            const string packageCode = "PI788857395BR";
+            const string packageCode = "DU713842539BR";
             IServices services = new Services();
             var result = services.GetPackageTracking(packageCode);
 
@@ -46,7 +43,7 @@ namespace Correios.NET.Tests
         [Fact]
         public void PackageTrackingService_ShouldReturnStatuses()
         {
-            const string packageCode = "SW552251158BR";
+            const string packageCode = "DU713842539BR";
             var services = new Moq.Mock<IServices>();
             services.Setup(s => s.GetPackageTracking(packageCode))
                 .Returns(Package.Parse(_packageHtml));
@@ -60,7 +57,7 @@ namespace Correios.NET.Tests
         [Fact]
         public void PackageTrackingService_ShouldBeDelivered()
         {
-            const string packageCode = "RC257589899CN";
+            const string packageCode = "DV248292626BR";
             var services = new Moq.Mock<IServices>();
             services.Setup(s => s.GetPackageTracking(packageCode))
                 .Returns(Package.Parse(_packageDeliveredHtml));

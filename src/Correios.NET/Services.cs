@@ -8,7 +8,7 @@ namespace Correios.NET
     public class Services : IServices
     {
         //mobile url http://m.correios.com.br/movel/index.do
-        private const string PACKAGE_TRACKING_URL = "http://websro.correios.com.br/sro_bin/txect01$.QueryList?P_LINGUA=001&P_TIPO=001&P_COD_UNI={0}";
+        private const string PACKAGE_TRACKING_URL = "http://sro.micropost.com.br/consulta.php?objetos={0}";
         private const string ZIP_ADDRESS_URL = "http://m.correios.com.br/movel/buscaCepConfirma.do";
 
         private readonly HttpClient _httpClient;

@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using Correios.NET.Exceptions;
+﻿using Correios.NET.Exceptions;
 using Correios.NET.Extensions;
 using CsQuery;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Correios.NET.Models
 {
     public class Package
     {
-        private const string DELIVERED_STATUS = "Entrega Efetuada";
+        private const string DELIVERED_STATUS = "Objeto entregue ao destinatário";
 
         private string _code;
 
@@ -86,7 +85,11 @@ namespace Correios.NET.Models
 
         private static string ParsePackageCode(CQ dom)
         {
-            var code = dom["input[name=P_ITEMCODE]"].Val();
+            var code = string.Empty;
+            var resultTitle = dom["body > p:first"].Text();
+
+            if (!string.IsNullOrEmpty(resultTitle) && resultTitle.Contains("-"))
+                code = resultTitle.Split('-')[0].Trim();
 
             if (string.IsNullOrEmpty(code))
                 throw new ParseException("Código da encomenda/pacote não foi encontrado.");
@@ -112,18 +115,18 @@ namespace Correios.NET.Models
                         status = new PackageTracking();
                         if (columns[0].HasAttribute("rowspan"))
                         {
-                            status.Date = DateTime.Parse(columns[0].InnerText);
+                            status.Date = DateTime.Parse(columns[0].InnerText.RemoveLineEndings());
                         }
 
-                        status.Location = columns[1].InnerText;
-                        status.Status = columns[2].InnerText;
+                        status.Location = columns[1].InnerText.RemoveLineEndings();
+                        status.Status = columns[2].InnerText.RemoveLineEndings();
 
                         tracking.Add(status);
                     }
                     else
                     {
                         if (status != null)
-                            status.Details = columns[0].InnerText;
+                            status.Details = columns[0].InnerText.RemoveLineEndings();
                     }
                 }
             }
@@ -131,6 +134,9 @@ namespace Correios.NET.Models
             {
                 throw new ParseException("Não foi possível converter o pacote/encomenda.", ex);
             }
+
+            if (tracking.Count() == 0)
+                throw new ParseException("Rastreamento não encontrado.");
 
             return tracking;
         }
