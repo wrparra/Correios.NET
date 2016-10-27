@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Correios.NET.Models;
+using System.Text;
 
 namespace Correios.NET
 {
@@ -15,21 +16,20 @@ namespace Correios.NET
 
         public Services()
         {
-            _httpClient = new HttpClient();
+            _httpClient = new HttpClient();            
         }
 
         public async Task<Package> GetPackageTrackingAsync(string packageCode)
         {
             var url = string.Format(PACKAGE_TRACKING_URL, packageCode);
-            var html = await _httpClient.GetStringAsync(url);
+            var response = await _httpClient.GetByteArrayAsync(url);
+            var html = Encoding.GetEncoding("ISO-8859-1").GetString(response, 0, response.Length - 1);
             return await Task.Run(() => Package.Parse(html));
         }
 
         public Package GetPackageTracking(string packageCode)
         {
-            var url = string.Format(PACKAGE_TRACKING_URL, packageCode);
-            var html = _httpClient.GetStringAsync(url).Result;
-            return Package.Parse(html);
+            return GetPackageTrackingAsync(packageCode).Result;
         }
 
 
