@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>Correios.NET</id>
-        <version>0.9.7-prerelease</version>
+        <version>0.9.8-prerelease</version>
         <title>Correios.NET</title>
         <authors>Wellington R. Parra</authors>
 		<owners>Wellington R. Parra</owners>
