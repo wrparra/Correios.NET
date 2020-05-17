@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correios.NET", "Correios.NET\Correios.NET.csproj", "{A3A5FB3D-8F01-4F6D-8114-715BA075872A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correios.NET.Tests", "Correios.NET.Tests\Correios.NET.Tests.csproj", "{49D9B4CB-05C7-4CFD-86AA-8049263C667A}"
@@ -30,5 +32,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {496BFB6C-7869-44A9-A02A-43E0A0ED04D4}
 	EndGlobalSection
 EndGlobal

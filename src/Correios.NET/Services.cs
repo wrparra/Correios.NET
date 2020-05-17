@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Correios.NET.Models;
+using System.Collections.Generic;
 using System.Net.Http;
-using System.Threading.Tasks;
-using Correios.NET.Models;
 using System.Text;
-using Correios.NET.Exceptions;
-using CsQuery;
-using Correios.NET.Extensions;
+using System.Threading.Tasks;
 
 namespace Correios.NET
 {

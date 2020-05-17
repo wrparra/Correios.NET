@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Correios.NET.Exceptions;
-using Correios.NET.Models;
+﻿using Correios.NET.Exceptions;
 using FluentAssertions;
+using System;
 using Xunit;
 
 namespace Correios.NET.Tests.Models

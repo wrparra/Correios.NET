@@ -2,11 +2,16 @@ Correios.NET
 ================================
 API .NET para consumo de serviços dos correios.
 
+[![Build Status](https://img.shields.io/appveyor/ci/wrparra/correios-net.svg?style=flat-square)](https://ci.appveyor.com/project/wrparra/correios-net)
+[![GitHub Tag](https://img.shields.io/github/tag/wrparra/Correios.NET.svg?style=flat-square)](https://github.com/wrparra/Correios.NET/releases)
+[![NuGet Count](https://img.shields.io/nuget/dt/Correios.NET.svg?style=flat-square)](https://www.nuget.org/packages/Correios.NET/)
+[![Issues Open](https://img.shields.io/github/issues/wrparra/Correios.NET.svg?style=flat-square)](https://github.com/wrparra/Correios.NET/issues)
+
 Como usar
 -------------------------
 Para instalar o Correios.NET, execute o seguinte comando no Package Manager Console.
 
-	PM> Install-Package Correios.NET -pre
+	PM> Install-Package Correios.NET
 
 
 Rastreamento de encomendas/pacotes
@@ -74,11 +79,11 @@ Próximas implementações
 
 1. Cálculo de Frete
 2. Busca CEP por Logradouro
-3. e outros... ( http://www.correios.com.br/webservices/ )
+3. e outros...
 	
 Contato
 -------------------------
 
 Caso tenha alguma dúvida ou sugestão entre em contato: wrparra (em) gmail.com
 
-Copyright © 2013 Wellington R. Parra, released under the MIT license
+Copyright © 2013-2020 Wellington R. Parra, released under the MIT license

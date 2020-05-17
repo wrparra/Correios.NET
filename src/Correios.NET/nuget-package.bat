@@ -1,1 +1,1 @@
-nuget pack Correios.NET.csproj -OutputDirectory bin/NuGet/ -Verbose
+..\.nuget\nuget pack Correios.NET.csproj -OutputDirectory bin/NuGet/ 
