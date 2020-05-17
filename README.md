@@ -47,8 +47,11 @@ Exemplo utilizando Console App com método sync
     {
         static void Main(string[] args)
         {
-            var address = new Correios.NET.Services().GetAddress("15000000");
-            Console.WriteLine("{0} - {1} - {2} - {3}/{4}", address.ZipCode, address.Street, address.District, address.City, address.State);
+            var addresses = new Correios.NET.Services().GetAddresses("15000000");
+
+            foreach(var address in addresses)
+                Console.WriteLine("{0} - {1} - {2} - {3}/{4}", address.ZipCode, address.Street, address.District, address.City, address.State);
+            
             Console.ReadLine();
         }
     }
@@ -59,9 +62,7 @@ Exemplo utilizando ASP.NET MVC com método async
     {
         public async Task<ActionResult> Index()
         {
-            var address = new Correios.NET.Services().GetAddressAsync("15000000");
-            await Task.WhenAll(address);
-            ViewBag.Street = address.Result.Street;
+            var addresses = await new Correios.NET.Services().GetAddressesAsync("15000000");            
             return View();
         }
     }

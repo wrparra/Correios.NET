@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Correios.NET.Exceptions;
 using Correios.NET.Models;
 using FluentAssertions;
@@ -20,19 +22,28 @@ namespace Correios.NET.Tests.Models
         [Fact]
         public void AddressParse_ShouldReturnAddress()
         {
-            var result = Address.Parse(_addressHtml);
-            result.ZipCode.Should().Be("15000000");
-            result.Street.Should().Be("Rua de Teste");
-            result.District.Should().Be("Bairro de Teste");
-            result.City.Should().Be("São José do Rio Preto");
-            result.State.Should().Be("SP");
+            var result = Parser.ParseAddresses(_addressHtml);
+            result.Should().HaveCount(2);
+            var resultAddress1 = result.FirstOrDefault();
+            resultAddress1.ZipCode.Should().Be("15000010");
+            resultAddress1.Street.Should().Be("Rua de Teste 1");
+            resultAddress1.District.Should().Be("Bairro de Teste 1");
+            resultAddress1.City.Should().Be("São José do Rio Preto");
+            resultAddress1.State.Should().Be("SP");
+
+            var resultAddress2 = result.LastOrDefault();
+            resultAddress2.ZipCode.Should().Be("15000020");
+            resultAddress2.Street.Should().Be("Rua de Teste 2");
+            resultAddress2.District.Should().Be("Bairro de Teste 2");
+            resultAddress2.City.Should().Be("São José do Rio Preto");
+            resultAddress2.State.Should().Be("SP");
         }
 
         [Fact]
         public void AddressParse_ShouldThrowAnParseException()
         {
-            Action act = () => Address.Parse(_addressErrorHtml);
-            act.ShouldThrow<ParseException>().WithMessage("Endereço inválido.");
+            Action act = () => Parser.ParseAddresses(_addressErrorHtml);
+            act.Should().Throw<ParseException>().WithMessage("Endereço não encontrado.");
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Correios.NET.Tests.Models
         [Fact]
         public void PackageParse_ShouldBeReturnAValidPackage()
         {
-            var package = Package.Parse(_packageHtml);
+            var package = Parser.ParsePackage(_packageHtml);
             package.Code.Should().NotBeNullOrEmpty();
             package.IsValid.Should().BeTrue();
             package.ShipDate.Should().Be(DateTime.Parse("13/09/2016 21:08:00"));
@@ -39,7 +39,7 @@ namespace Correios.NET.Tests.Models
         [Fact]
         public void PackageParse_ShouldBeReturnADeliveredPackage()
         {
-            var package = Package.Parse(_packageDeliveredHtml);
+            var package = Parser.ParsePackage(_packageDeliveredHtml);
             package.Code.Should().NotBeNullOrEmpty();
             package.IsValid.Should().BeTrue();
             package.IsDelivered.Should().BeTrue();
@@ -50,15 +50,15 @@ namespace Correios.NET.Tests.Models
         [Fact]
         public void PackageParse_ShouldThrowAnParseException()
         {
-            Action act = () => Package.Parse(_packageErrorHtml);
-            act.ShouldThrow<ParseException>();
+            Action act = () => Parser.ParsePackage(_packageErrorHtml);
+            act.Should().Throw<ParseException>();
         }
 
         [Fact]
         public void PackageParse_ShouldThrowAnParseExceptionCodeNotFound()
         {
-            Action act = () => Package.Parse(_packageCodeNotFound);
-            act.ShouldThrow<ParseException>().WithMessage("Código da encomenda/pacote não foi encontrado.");
+            Action act = () => Parser.ParsePackage(_packageCodeNotFound);
+            act.Should().Throw<ParseException>().WithMessage("Código da encomenda/pacote não foi encontrado.");
         }
     }
 }

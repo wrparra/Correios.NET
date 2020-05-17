@@ -3,20 +3,22 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Correios.NET.Models;
 using System.Text;
+using Correios.NET.Exceptions;
+using CsQuery;
+using Correios.NET.Extensions;
 
 namespace Correios.NET
 {
     public class Services : IServices
     {
-        //mobile url http://m.correios.com.br/movel/index.do
         private const string PACKAGE_TRACKING_URL = "http://sro.micropost.com.br/consulta.php?objetos={0}";
-        private const string ZIP_ADDRESS_URL = "http://m.correios.com.br/movel/buscaCepConfirma.do";
+        private const string ZIP_ADDRESS_URL = "http://www.buscacep.correios.com.br/sistemas/buscacep/resultadoBuscaCepEndereco.cfm";
 
         private readonly HttpClient _httpClient;
 
         public Services()
         {
-            _httpClient = new HttpClient();            
+            _httpClient = new HttpClient();
         }
 
         public async Task<Package> GetPackageTrackingAsync(string packageCode)
@@ -24,7 +26,7 @@ namespace Correios.NET
             var url = string.Format(PACKAGE_TRACKING_URL, packageCode);
             var response = await _httpClient.GetByteArrayAsync(url);
             var html = Encoding.GetEncoding("ISO-8859-1").GetString(response, 0, response.Length - 1);
-            return await Task.Run(() => Package.Parse(html));
+            return await Task.Run(() => Parser.ParsePackage(html));
         }
 
         public Package GetPackageTracking(string packageCode)
@@ -33,32 +35,31 @@ namespace Correios.NET
         }
 
 
-        public async Task<Address> GetAddressAsync(string zipCode)
+        public async Task<IEnumerable<Address>> GetAddressesAsync(string zipCode)
         {
             using (var response = await _httpClient.PostAsync(ZIP_ADDRESS_URL, CreateAddressRequest(zipCode)))
             {
                 var html = await response.Content.ReadAsStringAsync();
-                return await Task.Run(() => Address.Parse(html));
+                return await Task.Run(() => Parser.ParseAddresses(html));
             }
         }
 
-        public Address GetAddress(string zipCode)
+        public IEnumerable<Address> GetAddresses(string zipCode)
         {
             using (var response = _httpClient.PostAsync(ZIP_ADDRESS_URL, CreateAddressRequest(zipCode)).Result)
             {
                 var html = response.Content.ReadAsStringAsync().Result;
-                return Address.Parse(html);
+                return Parser.ParseAddresses(html);
             }
-        }
+        }        
 
-        private static FormUrlEncodedContent CreateAddressRequest(string zipCode)
+        private FormUrlEncodedContent CreateAddressRequest(string zipCode)
         {
             var content = new FormUrlEncodedContent(new[]
             {
-                new KeyValuePair<string, string>("cepEntrada", zipCode),
-                new KeyValuePair<string, string>("tipoCep", string.Empty),
-                new KeyValuePair<string, string>("cepTemp", string.Empty),
-                new KeyValuePair<string, string>("metodo", "buscarCep"),
+                new KeyValuePair<string, string>("relaxation", zipCode),
+                new KeyValuePair<string, string>("tipoCep", "ALL"),
+                new KeyValuePair<string, string>("semelhante", "N")
             });
             return content;
         }

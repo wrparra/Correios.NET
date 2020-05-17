@@ -1,5 +1,8 @@
 ﻿using Correios.NET.Models;
 using FluentAssertions;
+using Moq;
+using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Correios.NET.Tests
@@ -20,7 +23,7 @@ namespace Correios.NET.Tests
         [Fact]
         public void PackageTrackingService_Live_ShouldReturnCodeAndStatuses()
         {
-            const string packageCode = "DU713842539BR";
+            const string packageCode = "OD747761508BR";
             IServices services = new Services();
             var result = services.GetPackageTracking(packageCode);
 
@@ -33,11 +36,48 @@ namespace Correios.NET.Tests
         {
             const string zipCode = "15025000";
             IServices services = new Services();
-            var result = services.GetAddress(zipCode);
+            var result = services.GetAddresses(zipCode);
+            result.Should().HaveCount(1);
+            var resultAddress = result.FirstOrDefault();
+            resultAddress.ZipCode.Should().Be(zipCode);
+            resultAddress.Street.Should().Be("Avenida Bady Bassitt - lado par");
+            resultAddress.District.Should().Be("Boa Vista");
+            resultAddress.City.Should().Be("São José do Rio Preto");
+            resultAddress.State.Should().Be("SP");
+        }
 
-            result.ZipCode.Should().Be(zipCode);
-            result.City.Should().Be("São José do Rio Preto");
-            result.State.Should().Be("SP");
+        [Fact]
+        public async void AddressServiceAsync_Live_ShouldReturnAddress()
+        {
+            const string zipCode = "15025000";
+            IServices services = new Services();
+            var result = await services.GetAddressesAsync(zipCode);           
+            result.Should().HaveCount(1);
+            var resultAddress = result.FirstOrDefault();
+            resultAddress.ZipCode.Should().Be(zipCode);
+            resultAddress.Street.Should().Be("Avenida Bady Bassitt - lado par");
+            resultAddress.District.Should().Be("Boa Vista");
+            resultAddress.City.Should().Be("São José do Rio Preto");
+            resultAddress.State.Should().Be("SP");
+        }
+
+        [Fact]
+        public void AddressService_ShouldReturnAddress()
+        {
+            const string zipCode = "15000010";
+            var services = new Mock<IServices>();
+            
+            services.Setup(s => s.GetAddresses(zipCode))
+                .Returns(Parser.ParseAddresses(_addressHtml));
+
+            var result = services.Object.GetAddresses(zipCode);
+            result.Should().HaveCount(2);
+            var resultAddress = result.FirstOrDefault();
+            resultAddress.ZipCode.Should().Be(zipCode);
+            resultAddress.Street.Should().Be("Rua de Teste 1");
+            resultAddress.District.Should().Be("Bairro de Teste 1");
+            resultAddress.City.Should().Be("São José do Rio Preto");
+            resultAddress.State.Should().Be("SP");
         }
 
         [Fact]
@@ -46,7 +86,7 @@ namespace Correios.NET.Tests
             const string packageCode = "DU713842539BR";
             var services = new Moq.Mock<IServices>();
             services.Setup(s => s.GetPackageTracking(packageCode))
-                .Returns(Package.Parse(_packageHtml));
+                .Returns(Parser.ParsePackage(_packageHtml));
 
             var result = services.Object.GetPackageTracking(packageCode);
 
@@ -60,29 +100,12 @@ namespace Correios.NET.Tests
             const string packageCode = "DV248292626BR";
             var services = new Moq.Mock<IServices>();
             services.Setup(s => s.GetPackageTracking(packageCode))
-                .Returns(Package.Parse(_packageDeliveredHtml));
+                .Returns(Parser.ParsePackage(_packageDeliveredHtml));
 
             var result = services.Object.GetPackageTracking(packageCode);
 
             result.Code.Should().Be(packageCode);
             result.IsDelivered.Should().BeTrue();
-        }
-
-        [Fact]
-        public void AddressService_ShouldReturnAddress()
-        {
-            const string zipCode = "15000000";
-            var services = new Moq.Mock<IServices>();
-
-            services.Setup(s => s.GetAddress(zipCode))
-                .Returns(Address.Parse(_addressHtml));
-
-            var result = services.Object.GetAddress(zipCode);
-            result.ZipCode.Should().Be(zipCode);
-            result.Street.Should().Be("Rua de Teste");
-            result.District.Should().Be("Bairro de Teste");
-            result.City.Should().Be("São José do Rio Preto");
-            result.State.Should().Be("SP");
-        }
+        }        
     }
 }

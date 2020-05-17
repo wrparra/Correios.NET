@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Correios.NET.Models;
 
 namespace Correios.NET
@@ -8,7 +9,7 @@ namespace Correios.NET
         Task<Package> GetPackageTrackingAsync(string packageCode);
         Package GetPackageTracking(string packageCode);
 
-        Task<Address> GetAddressAsync(string zipCode);
-        Address GetAddress(string zipCode);
+        Task<IEnumerable<Address>> GetAddressesAsync(string zipCode);
+        IEnumerable<Address> GetAddresses(string zipCode);        
     }
 }
