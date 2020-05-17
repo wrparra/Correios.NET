@@ -9,7 +9,7 @@ platform: Any CPU
 build_script:
 - ps: >-
     if ($env:APPVEYOR_PULL_REQUEST_NUMBER -eq $null -and $env:APPVEYOR_REPO_BRANCH -eq "master") {
-      .\build.ps1 -Target Publish
+      .\build.ps1 -Target DEFAULT
     } else {
       .\build.ps1 -Target AppVeyor
     }
