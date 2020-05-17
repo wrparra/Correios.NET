@@ -1,1 +1,0 @@
-..\.nuget\nuget pack Correios.NET.csproj -OutputDirectory bin/NuGet/ 
