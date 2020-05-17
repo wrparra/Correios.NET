@@ -1,6 +1,7 @@
 ﻿using Correios.NET.Exceptions;
 using FluentAssertions;
 using System;
+using System.Globalization;
 using Xunit;
 
 namespace Correios.NET.Tests.Models
@@ -14,6 +15,7 @@ namespace Correios.NET.Tests.Models
 
         public PackageTest()
         {
+            CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("pt-BR");
             _packageHtml = ResourcesReader.GetResourceAsString("Pacote.html");
             _packageDeliveredHtml = ResourcesReader.GetResourceAsString("PacoteEntregue.html");
             _packageErrorHtml = ResourcesReader.GetResourceAsString("PacoteNaoEncontrado.html");
