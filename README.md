@@ -1,6 +1,6 @@
-Correios.NET
-================================
-API .NET para consumo de serviços dos correios.
+![Correios.NET](./src/Correios.NET/icon.png)
+
+# Correios.NET
 
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/wrparra/Correios.NET/.NET%20Core?logo=github&style=flat-square)](https://github.com/wrparra/Correios.NET/actions)
 [![AppVeyor Build Status](https://img.shields.io/appveyor/build/wrparra/correios-net?logo=appveyor&style=flat-square)](https://ci.appveyor.com/project/wrparra/correios-net)
@@ -8,15 +8,25 @@ API .NET para consumo de serviços dos correios.
 [![NuGet Count](https://img.shields.io/nuget/dt/Correios.NET.svg?style=flat-square)](https://www.nuget.org/packages/Correios.NET/)
 [![Issues Open](https://img.shields.io/github/issues/wrparra/Correios.NET.svg?style=flat-square)](https://github.com/wrparra/Correios.NET/issues)
 
-Como usar
--------------------------
-Para instalar o Correios.NET, execute o seguinte comando no Package Manager Console.
+Biblioteca .NET para integração com os serviços dos Correios.
+Serviços disponíveis até o momento.
+- Consulta de CEPs
+- Consulta de Encomendas
+
+## Como usar
+
+Para instalar o Correios .NET por linha de comando:
+
+Usando Nuget no Package Manager Console
 
 	PM> Install-Package Correios.NET
+    
+Usando CLI do .NET Core
 
+    dotnet add package Correios.NET
 
-Rastreamento de encomendas/pacotes
--------------------------
+## Rastreamento de encomendas/pacotes
+
 Exemplo utilizando Console App com método sync
 
 	class Program
@@ -45,8 +55,11 @@ Exemplo utilizando ASP.NET MVC com método async
         }
     }
 
-Consulta de Endereços por CEP
--------------------------
+## Consulta de Endereços por CEP
+
+A consulta é feita informando um CEP com 8 dígitos, e neste caso somente um endereço é retornado.
+Ao informar um CEP com menos de 8 dígitos a busca é feita retornando todos os CEPs de acordo com o intervalo informado.
+
 Exemplo utilizando Console App com método sync
 
 	class Program
@@ -74,16 +87,15 @@ Exemplo utilizando ASP.NET MVC com método async
     }
 
 	
-Roadmap
--------------------------
+## Roadmap
+
 Próximas implementações
 
 1. Cálculo de Frete
 2. Busca CEP por Logradouro
 3. e outros...
 	
-Contato
--------------------------
+## Contato
 
 Caso tenha alguma dúvida ou sugestão entre em contato: wrparra (em) gmail.com
 
