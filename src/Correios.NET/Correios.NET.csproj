@@ -8,7 +8,7 @@
     <Description>Biblioteca .NET para integração dos serviços dos Correios</Description>
     <Copyright>Copyright © 2020</Copyright>
     <PackageProjectUrl>https://github.com/wrparra/Correios.NET</PackageProjectUrl>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageIcon>icon.png</PackageIcon>
     <RepositoryUrl>https://github.com/wrparra/Correios.NET</RepositoryUrl>
     <PackageTags>correios cep rastreio encomendas</PackageTags>
@@ -19,7 +19,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\LICENSE">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE.txt">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
@@ -27,10 +31,6 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
 
   <ItemGroup>
