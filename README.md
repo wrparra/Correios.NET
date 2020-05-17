@@ -2,7 +2,8 @@ Correios.NET
 ================================
 API .NET para consumo de serviços dos correios.
 
-[![Build Status](https://img.shields.io/appveyor/ci/wrparra/correios-net.svg?style=flat-square)](https://ci.appveyor.com/project/wrparra/correios-net)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/wrparra/Correios.NET/.NET%20Core?logo=github&style=flat-square)](https://github.com/wrparra/Correios.NET/actions)
+[![AppVeyor Build Status](https://img.shields.io/appveyor/build/wrparra/correios-net?logo=appveyor&style=flat-square)](https://ci.appveyor.com/project/wrparra/correios-net)
 [![GitHub Tag](https://img.shields.io/github/tag/wrparra/Correios.NET.svg?style=flat-square)](https://github.com/wrparra/Correios.NET/releases)
 [![NuGet Count](https://img.shields.io/nuget/dt/Correios.NET.svg?style=flat-square)](https://www.nuget.org/packages/Correios.NET/)
 [![Issues Open](https://img.shields.io/github/issues/wrparra/Correios.NET.svg?style=flat-square)](https://github.com/wrparra/Correios.NET/issues)
