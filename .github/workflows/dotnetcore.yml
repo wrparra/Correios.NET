@@ -18,8 +18,8 @@ jobs:
       with:
         dotnet-version: 3.1.101
     - name: Install dependencies
-      run: dotnet restore ..\..\src\Correios.NET.sln
+      run: dotnet restore <my project>
     - name: Build
-      run: dotnet build ..\..\src\Correios.NET.sln --configuration Release --no-restore
+      run: dotnet build <my project> --configuration Release --no-restore
     - name: Test
-      run: dotnet test ..\..\src\Correios.NET.sln --no-restore --verbosity normal
+      run: dotnet test <my project> --no-restore --verbosity normal
