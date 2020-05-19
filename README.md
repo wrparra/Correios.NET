@@ -24,7 +24,7 @@ Usando Nuget no Package Manager Console
     
 Usando CLI do .NET Core
 
-    dotnet add package Correios.NET
+    > dotnet add package Correios.NET
 
 ## Rastreamento de encomendas/pacotes
 
