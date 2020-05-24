@@ -7,8 +7,7 @@
 [![GitHub release](https://img.shields.io/github/v/release/wrparra/Correios.NET?logo=github&style=flat-square)](https://github.com/wrparra/Correios.NET/releases)
 [![NuGet Count](https://img.shields.io/nuget/dt/Correios.NET.svg?logo=nuget&style=flat-square)](https://www.nuget.org/packages/Correios.NET/)
 [![Issues Open](https://img.shields.io/github/issues/wrparra/Correios.NET.svg?logo=github&style=flat-square)](https://github.com/wrparra/Correios.NET/issues)
-![GitHub last commit](https://img.shields.io/github/last-commit/wrparra/Correios.NET?style=flat-square)
-![GitHub repo size](https://img.shields.io/github/repo-size/wrparra/Correios.NET?style=flat-square)
+[![GitHub last commit](https://img.shields.io/github/last-commit/wrparra/Correios.NET?style=flat-square)](https://github.com/wrparra/Correios.NET/commits/master)
 [![GitHub license](https://img.shields.io/github/license/wrparra/Correios.NET?style=flat-square)](https://github.com/wrparra/Correios.NET/blob/master/LICENSE.txt)
 
 Biblioteca .NET para integração com os serviços dos Correios.
