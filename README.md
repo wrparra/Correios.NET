@@ -8,9 +8,13 @@
 [![GitHub Tag](https://img.shields.io/github/tag/wrparra/Correios.NET.svg?logo=github&style=flat-square)](https://github.com/wrparra/Correios.NET/tags)
 [![NuGet Count](https://img.shields.io/nuget/dt/Correios.NET.svg?logo=nuget&style=flat-square)](https://www.nuget.org/packages/Correios.NET/)
 [![Issues Open](https://img.shields.io/github/issues/wrparra/Correios.NET.svg?logo=github&style=flat-square)](https://github.com/wrparra/Correios.NET/issues)
+![GitHub last commit](https://img.shields.io/github/last-commit/wrparra/Correios.NET?style=flat-square)
+![GitHub repo size](https://img.shields.io/github/repo-size/wrparra/Correios.NET?style=flat-square)
+[![GitHub license](https://img.shields.io/github/license/wrparra/Correios.NET?style=flat-square)](https://github.com/wrparra/Correios.NET/blob/master/LICENSE.txt)
 
 Biblioteca .NET para integração com os serviços dos Correios.
 Serviços disponíveis até o momento.
+
 - Consulta de CEPs
 - Consulta de Encomendas
 
@@ -20,8 +24,8 @@ Para instalar o Correios .NET por linha de comando:
 
 Usando Nuget no Package Manager Console
 
-	PM> Install-Package Correios.NET
-    
+    PM> Install-Package Correios.NET
+
 Usando CLI do .NET Core
 
     > dotnet add package Correios.NET
@@ -30,7 +34,7 @@ Usando CLI do .NET Core
 
 Exemplo utilizando Console App com método sync
 
-	class Program
+    class Program
     {
         static void Main(string[] args)
         {
@@ -42,10 +46,10 @@ Exemplo utilizando Console App com método sync
             Console.ReadLine();
         }
     }
-	
+
 Exemplo utilizando ASP.NET MVC com método async
 
-	public class HomeController : AsyncController
+    public class HomeController : AsyncController
     {
         public async Task<ActionResult> Index()
         {
@@ -63,7 +67,7 @@ Ao informar um CEP com menos de 8 dígitos a busca é feita retornando todos os 
 
 Exemplo utilizando Console App com método sync
 
-	class Program
+    class Program
     {
         static void Main(string[] args)
         {
@@ -71,23 +75,22 @@ Exemplo utilizando Console App com método sync
 
             foreach(var address in addresses)
                 Console.WriteLine("{0} - {1} - {2} - {3}/{4}", address.ZipCode, address.Street, address.District, address.City, address.State);
-            
+
             Console.ReadLine();
         }
     }
-	
+
 Exemplo utilizando ASP.NET MVC com método async
 
-	public class HomeController : AsyncController
+    public class HomeController : AsyncController
     {
         public async Task<ActionResult> Index()
         {
-            var addresses = await new Correios.NET.Services().GetAddressesAsync("15000000");            
+            var addresses = await new Correios.NET.Services().GetAddressesAsync("15000000");
             return View();
         }
     }
 
-	
 ## Roadmap
 
 Próximas implementações
@@ -95,7 +98,7 @@ Próximas implementações
 1. Cálculo de Frete
 2. Busca CEP por Logradouro
 3. e outros...
-	
+
 ## Contato
 
 Caso tenha alguma dúvida ou sugestão entre em contato: wrparra (em) gmail.com
