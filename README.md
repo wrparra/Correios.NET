@@ -5,7 +5,6 @@
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/wrparra/Correios.NET/.NET%20Core?logo=github&style=flat-square)](https://github.com/wrparra/Correios.NET/actions)
 [![AppVeyor Build Status](https://img.shields.io/appveyor/build/wrparra/correios-net?logo=appveyor&style=flat-square)](https://ci.appveyor.com/project/wrparra/correios-net)
 [![GitHub release](https://img.shields.io/github/v/release/wrparra/Correios.NET?logo=github&style=flat-square)](https://github.com/wrparra/Correios.NET/releases)
-[![GitHub Tag](https://img.shields.io/github/tag/wrparra/Correios.NET.svg?logo=github&style=flat-square)](https://github.com/wrparra/Correios.NET/tags)
 [![NuGet Count](https://img.shields.io/nuget/dt/Correios.NET.svg?logo=nuget&style=flat-square)](https://www.nuget.org/packages/Correios.NET/)
 [![Issues Open](https://img.shields.io/github/issues/wrparra/Correios.NET.svg?logo=github&style=flat-square)](https://github.com/wrparra/Correios.NET/issues)
 ![GitHub last commit](https://img.shields.io/github/last-commit/wrparra/Correios.NET?style=flat-square)
