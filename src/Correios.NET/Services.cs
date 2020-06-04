@@ -64,7 +64,7 @@ namespace Correios.NET
             int height, int width, int length, float weight)
         {
             originalZipCode = originalZipCode.Replace(".", "").Replace("-", "");
-            deliveryZipCode = originalZipCode.Replace(".", "").Replace("-", "");
+            deliveryZipCode = deliveryZipCode.Replace(".", "").Replace("-", "");
 
             if (height < 2 || height > 100)
                 throw new PackageSizeException("A altura da caixa deve ter no mínimo 2cm e no máximo 100cm");
@@ -83,7 +83,7 @@ namespace Correios.NET
                 weight = 0.3f;
             else if (weight > 0.3f && weight < 1)
                 weight = 1f;
-            else
+            else if(weight != 0.3f)
                 weight = (float)Math.Ceiling(weight);
 
             Array values = Enum.GetValues(typeof(DeliveryOptions));
