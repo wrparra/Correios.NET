@@ -5,6 +5,7 @@ using Correios.NET.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
@@ -148,7 +149,7 @@ namespace Correios.NET
                 new KeyValuePair<string, string>("Altura", height.ToString()),
                 new KeyValuePair<string, string>("Largura", width.ToString()),
                 new KeyValuePair<string, string>("Comprimento", length.ToString()),
-                new KeyValuePair<string, string>("peso", weight.ToString()),
+                new KeyValuePair<string, string>("peso", weight.ToString(CultureInfo.InvariantCulture)),
 
 
                 new KeyValuePair<string, string>("Selecao", ""),
