@@ -23,10 +23,9 @@ namespace Correios.NET.Tests
         [Fact]
         public void PackageTrackingService_Live_ShouldReturnCodeAndStatuses()
         {
-            const string packageCode = "OD747761508BR";
+            const string packageCode = "PZ270541207BR";
             IServices services = new Services();
             var result = services.GetPackageTracking(packageCode);
-
             result.Code.Should().Be(packageCode);
             result.TrackingHistory.Count.Should().BeGreaterThan(0);
         }
@@ -83,7 +82,7 @@ namespace Correios.NET.Tests
         [Fact]
         public void PackageTrackingService_ShouldReturnStatuses()
         {
-            const string packageCode = "DU713842539BR";
+            const string packageCode = "PZ270541207BR";
             var services = new Moq.Mock<IServices>();
             services.Setup(s => s.GetPackageTracking(packageCode))
                 .Returns(Parser.ParsePackage(_packageHtml));
@@ -91,13 +90,13 @@ namespace Correios.NET.Tests
             var result = services.Object.GetPackageTracking(packageCode);
 
             result.Code.Should().Be(packageCode);
-            result.TrackingHistory.Should().HaveCount(3);
+            result.TrackingHistory.Should().HaveCount(9);
         }
 
         [Fact]
         public void PackageTrackingService_ShouldBeDelivered()
         {
-            const string packageCode = "DV248292626BR";
+            const string packageCode = "PZ270541207BR";
             var services = new Moq.Mock<IServices>();
             services.Setup(s => s.GetPackageTracking(packageCode))
                 .Returns(Parser.ParsePackage(_packageDeliveredHtml));

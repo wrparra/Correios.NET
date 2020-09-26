@@ -8,7 +8,7 @@ namespace Correios.NET
 {
     public class Services : IServices
     {
-        private const string PACKAGE_TRACKING_URL = "http://sro.micropost.com.br/consulta.php?objetos={0}";
+        private const string PACKAGE_TRACKING_URL = "https://www2.correios.com.br/sistemas/rastreamento/ctrl/ctrlRastreamento.cfm";
         private const string ZIP_ADDRESS_URL = "http://www.buscacep.correios.com.br/sistemas/buscacep/resultadoBuscaCepEndereco.cfm";
 
         private readonly HttpClient _httpClient;
@@ -20,10 +20,22 @@ namespace Correios.NET
 
         public async Task<Package> GetPackageTrackingAsync(string packageCode)
         {
-            var url = string.Format(PACKAGE_TRACKING_URL, packageCode);
-            var response = await _httpClient.GetByteArrayAsync(url);
-            var html = Encoding.GetEncoding("ISO-8859-1").GetString(response, 0, response.Length - 1);
-            return await Task.Run(() => Parser.ParsePackage(html));
+            using (var response = await _httpClient.PostAsync(PACKAGE_TRACKING_URL, CreatePackageTrackingRequest(packageCode)))
+            {
+                var html = await response.Content.ReadAsStringAsync();
+                return await Task.Run(() => Parser.ParsePackage(html));
+            }
+        }
+
+        private FormUrlEncodedContent CreatePackageTrackingRequest(string packageCode)
+        {
+            var content = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("objetos", packageCode),
+                new KeyValuePair<string, string>("p_tipo", "001"),
+                new KeyValuePair<string, string>("p_lingua", "001")
+            });
+            return content;
         }
 
         public Package GetPackageTracking(string packageCode)
@@ -48,7 +60,7 @@ namespace Correios.NET
                 var html = response.Content.ReadAsStringAsync().Result;
                 return Parser.ParseAddresses(html);
             }
-        }        
+        }
 
         private FormUrlEncodedContent CreateAddressRequest(string zipCode)
         {

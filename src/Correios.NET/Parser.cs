@@ -8,6 +8,11 @@ using AngleSharp;
 using AngleSharp.Html.Parser;
 using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
+using System.Text.RegularExpressions;
+using System.Globalization;
+using AngleSharp.Text;
+using System.Linq.Expressions;
+
 
 namespace Correios.NET
 {
@@ -82,25 +87,43 @@ namespace Correios.NET
         /// <exception cref="Correios.NET.Exceptions.ParseException"></exception>
         public static Package ParsePackage(string html)
         {
-            var document = new HtmlParser().ParseDocument(html);
-            var packageCode = ParsePackageCode(document);
-            var package = new Package(packageCode);
-            package.AddTrackingInfo(ParsePackageTracking(document));
-            return package;
+            try
+            {
+                var document = new HtmlParser().ParseDocument(html);
+                var packageCode = ParsePackageCode(document);
+                var package = new Package(packageCode);
+                package.AddTrackingInfo(ParsePackageTracking(document));
+                return package;
+            }
+            catch (ParseException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                throw new ParseException("Não foi possível converter o pacote/encomenda.", ex);
+            }
         }
 
         private static string ParsePackageCode(IHtmlDocument document)
         {
-            var code = string.Empty;
-            var resultTitle = document.QuerySelector("body > p").Text();
+            try
+            {
+                var code = document.QuerySelector(".codSro").Text();
 
-            if (!string.IsNullOrEmpty(resultTitle) && resultTitle.Contains("-"))
-                code = resultTitle.Split('-')[0].Trim();
+                if (string.IsNullOrEmpty(code))
+                    throw new ParseException("Código da encomenda/pacote não foi encontrado.");
 
-            if (string.IsNullOrEmpty(code))
+                return code;
+            }
+            catch (ParseException ex)
+            {
+                throw ex;
+            }
+            catch (Exception)
+            {
                 throw new ParseException("Código da encomenda/pacote não foi encontrado.");
-
-            return code;
+            }
         }
 
         private static IEnumerable<PackageTracking> ParsePackageTracking(IHtmlDocument document)
@@ -108,24 +131,27 @@ namespace Correios.NET
             var tracking = new List<PackageTracking>();
 
             PackageTracking status = null;
-            var tableRows = document.QuerySelectorAll("table tr");
+            var tableRows = document.QuerySelectorAll("table.listEvent.sro tbody tr");
             if (tableRows.Length == 0)
-                throw new ParseException(document.QuerySelector("p").Text().RemoveLineEndings());
+                throw new ParseException("Postagem não encontrada e/ou Aguardando postagem pelo remetente.");
 
             try
             {
-                foreach (var columns in tableRows.Skip(1).Select(tableRow => tableRow.Children))
+                foreach (var columns in tableRows.Select(tr => tr.Children))
                 {
-                    if (columns.Count() == 3)
+                    if (columns.Count() == 2)
                     {
                         status = new PackageTracking();
-                        if (columns[0].HasAttribute("rowspan"))
-                        {
-                            status.Date = DateTime.Parse(columns[0].Text().RemoveLineEndings());
-                        }
 
-                        status.Location = columns[1].Text().RemoveLineEndings();
-                        status.Status = columns[2].Text().RemoveLineEndings();
+                        var dateLocation = columns[0].Text().RemoveLineEndings();
+                        var dateLocationSplitted = dateLocation.SplitSpaces();
+                        status.Date = DateTime.Parse($"{dateLocationSplitted[0]} {dateLocationSplitted[1]}");
+                        status.Location = string.Join(" ", dateLocationSplitted.Skip(2).ToArray());
+                        status.Status = columns[1].QuerySelector("strong").Text().RemoveLineEndings();
+
+                        var descriptionSplitted = columns[1].Text().RemoveLineEndings().SplitSpaces(3);
+                        if (descriptionSplitted.Length > 1)
+                            status.Details = string.Join(" ", descriptionSplitted.Skip(1).ToArray());
 
                         tracking.Add(status);
                     }
