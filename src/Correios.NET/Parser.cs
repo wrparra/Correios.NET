@@ -145,7 +145,7 @@ namespace Correios.NET
 
                         var dateLocation = columns[0].Text().RemoveLineEndings();
                         var dateLocationSplitted = dateLocation.SplitSpaces();
-                        status.Date = DateTime.Parse($"{dateLocationSplitted[0]} {dateLocationSplitted[1]}");
+                        status.Date = DateTime.Parse($"{dateLocationSplitted[0]} {dateLocationSplitted[1]}", CultureInfo.GetCultureInfo("pt-BR"));
                         status.Location = string.Join(" ", dateLocationSplitted.Skip(2).ToArray());
                         status.Status = columns[1].QuerySelector("strong").Text().RemoveLineEndings();
 

@@ -28,7 +28,7 @@ namespace Correios.NET.Tests.Models
             var package = Parser.ParsePackage(_packageHtml);
             package.Code.Should().NotBeNullOrEmpty();
             package.IsValid.Should().BeTrue();
-            package.ShipDate.Should().Be(DateTime.Parse("20/08/2020 11:15"));
+            package.ShipDate.Should().Be(DateTime.Parse("20/08/2020 11:15", CultureInfo.GetCultureInfo("pt-BR")));
             package.IsDelivered.Should().BeFalse();
             package.DeliveryDate.HasValue.Should().BeFalse();
         }
@@ -40,8 +40,8 @@ namespace Correios.NET.Tests.Models
             package.Code.Should().NotBeNullOrEmpty();
             package.IsValid.Should().BeTrue();
             package.IsDelivered.Should().BeTrue();
-            package.ShipDate.Should().Be(DateTime.Parse("20/08/2020 11:15"));
-            package.DeliveryDate.Should().Be(DateTime.Parse("05/09/2020 12:38"));
+            package.ShipDate.Should().Be(DateTime.Parse("20/08/2020 11:15", CultureInfo.GetCultureInfo("pt-BR")));
+            package.DeliveryDate.Should().Be(DateTime.Parse("05/09/2020 12:38", CultureInfo.GetCultureInfo("pt-BR")));
         }
 
         [Fact]
