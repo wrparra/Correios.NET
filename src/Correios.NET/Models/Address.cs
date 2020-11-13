@@ -1,5 +1,4 @@
-﻿
-namespace Correios.NET.Models
+﻿namespace Correios.NET.Models
 {
     public class Address
     {
@@ -8,5 +7,5 @@ namespace Correios.NET.Models
         public string City { get; set; }
         public string State { get; set; }
         public string ZipCode { get; set; }
-    }
+    }    
 }

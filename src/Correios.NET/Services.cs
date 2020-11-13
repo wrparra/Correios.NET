@@ -1,5 +1,8 @@
 ﻿using Correios.NET.Models;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +12,7 @@ namespace Correios.NET
     public class Services : IServices
     {
         private const string PACKAGE_TRACKING_URL = "https://www2.correios.com.br/sistemas/rastreamento/ctrl/ctrlRastreamento.cfm";
-        private const string ZIP_ADDRESS_URL = "http://www.buscacep.correios.com.br/sistemas/buscacep/resultadoBuscaCepEndereco.cfm";
+        private const string ZIP_ADDRESS_URL = "https://buscacep.correios.com.br/app/endereco/carrega-cep-endereco.php?endereco={0}&tipoCEP=ALL";
 
         private readonly HttpClient _httpClient;
 
@@ -46,31 +49,31 @@ namespace Correios.NET
 
         public async Task<IEnumerable<Address>> GetAddressesAsync(string zipCode)
         {
-            using (var response = await _httpClient.PostAsync(ZIP_ADDRESS_URL, CreateAddressRequest(zipCode)))
+            using (var response = await _httpClient.GetAsync(string.Format(ZIP_ADDRESS_URL, zipCode)))
             {
-                var html = await response.Content.ReadAsStringAsync();
-                return await Task.Run(() => Parser.ParseAddresses(html));
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var correiosAddressResponse = JsonConvert.DeserializeObject<CorreiosAddresResponse>(jsonResponse);
+                if (correiosAddressResponse != null && !correiosAddressResponse.Erro)
+                {
+                    return correiosAddressResponse.Dados.Select(a => new Address
+                    {
+                        Street = a.LogradouroDNEC,
+                        District = a.Bairro,
+                        City = a.Localidade,
+                        State = a.Uf,
+                        ZipCode = a.Cep
+                    });
+                }
             }
+
+            return null;
         }
 
         public IEnumerable<Address> GetAddresses(string zipCode)
         {
-            using (var response = _httpClient.PostAsync(ZIP_ADDRESS_URL, CreateAddressRequest(zipCode)).Result)
-            {
-                var html = response.Content.ReadAsStringAsync().Result;
-                return Parser.ParseAddresses(html);
-            }
+            return GetAddressesAsync(zipCode).Result;
         }
 
-        private FormUrlEncodedContent CreateAddressRequest(string zipCode)
-        {
-            var content = new FormUrlEncodedContent(new[]
-            {
-                new KeyValuePair<string, string>("relaxation", zipCode),
-                new KeyValuePair<string, string>("tipoCep", "ALL"),
-                new KeyValuePair<string, string>("semelhante", "N")
-            });
-            return content;
-        }
+
     }
 }

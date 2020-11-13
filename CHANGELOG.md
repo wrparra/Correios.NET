@@ -1,3 +1,10 @@
+# Versão 1.2.1
+
+Liberada Sexta, 13 de Novembro de 2020.
+
+* [UPDATE] Ajustes para o novo serviço de busca de CEPs dos Correios.
+
+
 # Versão 1.1.2
 
 Liberada Sábado, 26 de Setembro de 2020.
