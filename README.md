@@ -97,8 +97,6 @@ Próximas implementações
 2. Busca CEP por Logradouro
 3. e outros...
 
-## Contato
 
-Caso tenha alguma dúvida ou sugestão entre em contato: wrparra (em) gmail.com
-
+----
 Copyright © 2013-2020 Wellington R. Parra, released under the MIT license
