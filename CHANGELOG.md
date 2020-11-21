@@ -1,3 +1,10 @@
+# Versão 1.3.1
+
+Liberada Sábado, 21 de Novembro de 2020.
+
+* [FIX] Mudança de Endereço do serviço de Pesquisa de CEP
+
+
 # Versão 1.2.1
 
 Liberada Sexta, 13 de Novembro de 2020.
