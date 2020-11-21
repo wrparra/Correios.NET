@@ -12,7 +12,7 @@ namespace Correios.NET
     public class Services : IServices
     {
         private const string PACKAGE_TRACKING_URL = "https://www2.correios.com.br/sistemas/rastreamento/ctrl/ctrlRastreamento.cfm";
-        private const string ZIP_ADDRESS_URL = "https://buscacep.correios.com.br/app/endereco/carrega-cep-endereco.php?endereco={0}&tipoCEP=ALL";
+        private const string ZIP_ADDRESS_URL = "https://buscacepinter.correios.com.br/app/endereco/carrega-cep-endereco.php?endereco={0}&tipoCEP=ALL";
 
         private readonly HttpClient _httpClient;
 
