@@ -12,7 +12,7 @@ namespace Correios.NET
     public class Services : IServices
     {
         private const string PACKAGE_TRACKING_URL = "https://www2.correios.com.br/sistemas/rastreamento/ctrl/ctrlRastreamento.cfm";
-        private const string ZIP_ADDRESS_URL = "https://buscacepinter.correios.com.br/app/endereco/carrega-cep-endereco.php?endereco={0}&tipoCEP=ALL";
+        private const string ZIP_ADDRESS_URL = "https://buscacepinter.correios.com.br/app/endereco/carrega-cep-endereco.php";
 
         private readonly HttpClient _httpClient;
 
@@ -46,10 +46,9 @@ namespace Correios.NET
             return GetPackageTrackingAsync(packageCode).Result;
         }
 
-
         public async Task<IEnumerable<Address>> GetAddressesAsync(string zipCode)
         {
-            using (var response = await _httpClient.GetAsync(string.Format(ZIP_ADDRESS_URL, zipCode)))
+            using (var response = await _httpClient.PostAsync(ZIP_ADDRESS_URL, CreateZipCodeRequest(zipCode)))
             {
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var correiosAddressResponse = JsonConvert.DeserializeObject<CorreiosAddresResponse>(jsonResponse);
@@ -67,6 +66,17 @@ namespace Correios.NET
             }
 
             return null;
+        }
+
+        private FormUrlEncodedContent CreateZipCodeRequest(string zipCode)
+        {
+            var content = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("endereco", zipCode),
+                new KeyValuePair<string, string>("tipoCEP", "ALL")
+
+            });
+            return content;
         }
 
         public IEnumerable<Address> GetAddresses(string zipCode)

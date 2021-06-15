@@ -23,7 +23,7 @@ namespace Correios.NET.Tests
         [Fact]
         public void PackageTrackingService_Live_ShouldReturnCodeAndStatuses()
         {
-            const string packageCode = "PZ270541207BR";
+            const string packageCode = "QE934006846BR";
             IServices services = new Services();
             var result = services.GetPackageTracking(packageCode);
             result.Code.Should().Be(packageCode);
