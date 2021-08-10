@@ -4,14 +4,11 @@ using Correios.NET.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AngleSharp;
 using AngleSharp.Html.Parser;
 using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
-using System.Text.RegularExpressions;
 using System.Globalization;
 using AngleSharp.Text;
-using System.Linq.Expressions;
 
 
 namespace Correios.NET
@@ -25,41 +22,41 @@ namespace Correios.NET
         /// </summary>
         /// <param name="html">html page</param>
         /// <returns>An Address</returns>
-        /// <exception cref="Correios.NET.Exceptions.ParseException"></exception>
+        /// <exception cref="ParseException"></exception>
         public static IEnumerable<Address> ParseAddresses(string html)
         {
             //var config = Configuration.Default;
             //var context = BrowsingContext.New(config);
             //var document = context.OpenAsync(req => req.Content(html)).Result;            
-            
+
             var document = new HtmlParser().ParseDocument(html);
 
             var content = document.QuerySelector("div.ctrlcontent");
-            var responseText = content.QuerySelector("p").Text();
+            var responseText = content?.QuerySelector("p").Text();
 
-            if (responseText == "DADOS NAO ENCONTRADOS")
+            if (responseText == null || responseText.Equals("DADOS NAO ENCONTRADOS", StringComparison.InvariantCultureIgnoreCase))
                 throw new ParseException("Endereço não encontrado.");
 
             var list = new List<Address>();
 
-            var tableRows = content.QuerySelectorAll("> table.tmptabela > tbody > tr").Skip(1);
+            var tableRows = content?.QuerySelectorAll("> table.tmptabela > tbody > tr").Skip(1);
 
-            if (tableRows.Count() == 0)
+            if (tableRows == null || !tableRows.Any())
                 throw new ParseException("Endereço não encontrado.");
 
             foreach (var row in tableRows)
             {
                 var address = row.Children;
-                var street = address[0].Text().RemoveLineEndings();
-                var district = address[1].Text().RemoveLineEndings();
-                var cityState = address[2].Text().RemoveLineEndings().Split(new[] { '/' });
+                var street = address[0]?.Text().RemoveLineEndings();
+                var district = address[1]?.Text().RemoveLineEndings();
+                var cityState = address[2]?.Text().RemoveLineEndings().Split(new[] { '/' });
 
-                if (cityState.Length != 2)
+                if (cityState?.Length != 2)
                     throw new ParseException("Não foi possível extrair as informações de Cidade e Estado.");
 
-                var city = cityState[0].Trim();
-                var state = cityState[1].Trim();
-                var zipcode = address[3].Text().RemoveHyphens();
+                var city = cityState[0]?.Trim();
+                var state = cityState[1]?.Trim();
+                var zipcode = address[3]?.Text().RemoveHyphens();
 
                 list.Add(new Address
                 {
@@ -84,7 +81,7 @@ namespace Correios.NET
         /// </summary>
         /// <param name="html">html page</param>
         /// <returns>A Package</returns>
-        /// <exception cref="Correios.NET.Exceptions.ParseException"></exception>
+        /// <exception cref="ParseException"></exception>
         public static Package ParsePackage(string html)
         {
             try
@@ -109,7 +106,7 @@ namespace Correios.NET
         {
             try
             {
-                var code = document.QuerySelector(".codSro").Text();
+                var code = document.QuerySelector(".codSro")?.Text();
 
                 if (string.IsNullOrEmpty(code))
                     throw new ParseException("Código da encomenda/pacote não foi encontrado.");
@@ -143,14 +140,18 @@ namespace Correios.NET
                     {
                         status = new PackageTracking();
 
-                        var dateLocation = columns[0].Text().RemoveLineEndings();
-                        var dateLocationSplitted = dateLocation.SplitSpaces();
-                        status.Date = DateTime.Parse($"{dateLocationSplitted[0]} {dateLocationSplitted[1]}", CultureInfo.GetCultureInfo("pt-BR"));
-                        status.Location = string.Join(" ", dateLocationSplitted.Skip(2).ToArray());
-                        status.Status = columns[1].QuerySelector("strong").Text().RemoveLineEndings();
+                        var dateLocation = columns[0]?.Text().RemoveLineEndings();
+                        var dateLocationSplitted = dateLocation?.SplitSpaces();
+                        
+                        if (dateLocationSplitted != null && dateLocationSplitted.Length >= 1)
+                        {
+                            status.Date = DateTime.Parse($"{dateLocationSplitted[0]} {dateLocationSplitted[1]}", CultureInfo.GetCultureInfo("pt-BR"));
+                            status.Location = string.Join(" ", dateLocationSplitted.Skip(2)?.ToArray());
+                            status.Status = columns[1].QuerySelector("strong")?.Text().RemoveLineEndings();
+                        }
 
-                        var descriptionSplitted = columns[1].Text().RemoveLineEndings().SplitSpaces(3);
-                        if (descriptionSplitted.Length > 1)
+                        var descriptionSplitted = columns[1]?.Text().RemoveLineEndings().SplitSpaces(3);
+                        if (descriptionSplitted != null && descriptionSplitted.Length > 1)
                             status.Details = string.Join(" ", descriptionSplitted.Skip(1).ToArray());
 
                         tracking.Add(status);
@@ -158,7 +159,7 @@ namespace Correios.NET
                     else
                     {
                         if (status != null)
-                            status.Details = columns[0].Text().RemoveLineEndings();
+                            status.Details = columns[0]?.Text().RemoveLineEndings();
                     }
                 }
             }
@@ -167,7 +168,7 @@ namespace Correios.NET
                 throw new ParseException("Não foi possível converter o pacote/encomenda.", ex);
             }
 
-            if (tracking.Count() == 0)
+            if (tracking.Count == 0)
                 throw new ParseException("Rastreamento não encontrado.");
 
             return tracking;
