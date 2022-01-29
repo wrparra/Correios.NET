@@ -9,10 +9,10 @@ namespace Correios.NET.Api.Controllers
     [Route("cep")]
     public class ZipCodeController : ControllerBase
     {
-        private readonly Correios.NET.IServices _services;
+        private readonly ICorreiosService _services;
         private readonly ILogger<ZipCodeController> _logger;
 
-        public ZipCodeController(Correios.NET.IServices services, ILogger<ZipCodeController> logger)
+        public ZipCodeController(ICorreiosService services, ILogger<ZipCodeController> logger)
         {
             _services = services;
             _logger = logger;

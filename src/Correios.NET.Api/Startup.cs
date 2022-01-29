@@ -20,7 +20,7 @@ namespace Correios.NET.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddTransient<Correios.NET.IServices, Correios.NET.Services>();
+            services.AddScoped<ICorreiosService, CorreiosService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

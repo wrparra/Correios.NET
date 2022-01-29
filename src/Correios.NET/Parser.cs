@@ -1,17 +1,12 @@
-﻿using Correios.NET.Exceptions;
+﻿using AngleSharp.Dom;
+using AngleSharp.Html.Dom;
+using AngleSharp.Html.Parser;
+using Correios.NET.Exceptions;
 using Correios.NET.Extensions;
 using Correios.NET.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AngleSharp;
-using AngleSharp.Html.Parser;
-using AngleSharp.Dom;
-using AngleSharp.Html.Dom;
-using System.Text.RegularExpressions;
-using System.Globalization;
-using AngleSharp.Text;
-using System.Linq.Expressions;
 
 
 namespace Correios.NET
@@ -31,7 +26,7 @@ namespace Correios.NET
             //var config = Configuration.Default;
             //var context = BrowsingContext.New(config);
             //var document = context.OpenAsync(req => req.Content(html)).Result;            
-            
+
             var document = new HtmlParser().ParseDocument(html);
 
             var content = document.QuerySelector("div.ctrlcontent");
@@ -109,7 +104,7 @@ namespace Correios.NET
         {
             try
             {
-                var code = document.QuerySelector(".codSro").Text();
+                var code = document.QuerySelector("#page > main > .sub_header_in > .container > h1").Text().Replace("Rastreamento de Objeto - ", string.Empty);
 
                 if (string.IsNullOrEmpty(code))
                     throw new ParseException("Código da encomenda/pacote não foi encontrado.");
@@ -130,36 +125,26 @@ namespace Correios.NET
         {
             var tracking = new List<PackageTracking>();
 
-            PackageTracking status = null;
-            var tableRows = document.QuerySelectorAll("table.listEvent.sro tbody tr");
-            if (tableRows.Length == 0)
+            PackageTracking trackingStatus = null;
+            var statusLines = document.QuerySelectorAll(".singlepost > ul.linha_status");
+            if (statusLines.Length == 0)
                 throw new ParseException("Postagem não encontrada e/ou Aguardando postagem pelo remetente.");
+
+            const string packageDateTimePattern = @"[\w\s\:]*(\d{2}\/\d{2}\/\d{4})[\w\|\s\:]*(\d{2}\:\d{2})";
 
             try
             {
-                foreach (var columns in tableRows.Select(tr => tr.Children))
+                foreach (var lines in statusLines.Select(ul => ul.Children))
                 {
-                    if (columns.Count() == 2)
-                    {
-                        status = new PackageTracking();
+                    trackingStatus = new PackageTracking();
+                    trackingStatus.Status = lines[0].QuerySelector("b").Text().RemoveLineEndings();
+                    trackingStatus.Date = lines[1].Text().ExtractDateTime(packageDateTimePattern);
+                    trackingStatus.Source = lines[2].Text().RemoveLineEndings().Replace("Origem: ", string.Empty).Replace("Local: ", string.Empty);
 
-                        var dateLocation = columns[0].Text().RemoveLineEndings();
-                        var dateLocationSplitted = dateLocation.SplitSpaces();
-                        status.Date = DateTime.Parse($"{dateLocationSplitted[0]} {dateLocationSplitted[1]}", CultureInfo.GetCultureInfo("pt-BR"));
-                        status.Location = string.Join(" ", dateLocationSplitted.Skip(2).ToArray());
-                        status.Status = columns[1].QuerySelector("strong").Text().RemoveLineEndings();
+                    if (lines.Length >= 4)
+                        trackingStatus.Destination = lines[3].Text().RemoveLineEndings().Replace("Destino: ", string.Empty);
 
-                        var descriptionSplitted = columns[1].Text().RemoveLineEndings().SplitSpaces(3);
-                        if (descriptionSplitted.Length > 1)
-                            status.Details = string.Join(" ", descriptionSplitted.Skip(1).ToArray());
-
-                        tracking.Add(status);
-                    }
-                    else
-                    {
-                        if (status != null)
-                            status.Details = columns[0].Text().RemoveLineEndings();
-                    }
+                    tracking.Add(trackingStatus);
                 }
             }
             catch (Exception ex)

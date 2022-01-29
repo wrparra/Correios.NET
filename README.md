@@ -36,10 +36,10 @@ Exemplo utilizando Console App com método sync
     {
         static void Main(string[] args)
         {
-            var result = new Correios.NET.Services().GetPackageTracking("SW000000000BR");
+            var result = new Correios.NET.CorreiosService().GetPackageTracking("SW000000000BR");
 
             foreach (var track in result.TrackingHistory)
-                Console.WriteLine("{0:dd/MM/yyyy HH:mm} - {1} - {2} - {3}", track.Date, track.Location, track.Status, track.Details);
+                Console.WriteLine("{0:dd/MM/yyyy HH:mm} - ({1} -> {2}) - {3}", track.Date, track.Source, track.Destination, track.Status);
 
             Console.ReadLine();
         }
@@ -51,9 +51,8 @@ Exemplo utilizando ASP.NET MVC com método async
     {
         public async Task<ActionResult> Index()
         {
-            var package = new Correios.NET.Services().GetPackageTrackingAsync("SW000000000BR");
-            await Task.WhenAll(package);
-            ViewBag.TrackingCode = package.Result.Code;
+            var package = await new Correios.NET.CorreiosService().GetPackageTrackingAsync("SW000000000BR");            
+            ViewBag.TrackingCode = package.Code;
             return View();
         }
     }
@@ -69,7 +68,7 @@ Exemplo utilizando Console App com método sync
     {
         static void Main(string[] args)
         {
-            var addresses = new Correios.NET.Services().GetAddresses("15000000");
+            var addresses = new Correios.NET.CorreiosService().GetAddresses("15000000");
 
             foreach(var address in addresses)
                 Console.WriteLine("{0} - {1} - {2} - {3}/{4}", address.ZipCode, address.Street, address.District, address.City, address.State);
@@ -84,7 +83,7 @@ Exemplo utilizando ASP.NET MVC com método async
     {
         public async Task<ActionResult> Index()
         {
-            var addresses = await new Correios.NET.Services().GetAddressesAsync("15000000");
+            var addresses = await new Correios.NET.CorreiosService().GetAddressesAsync("15000000");
             return View();
         }
     }
@@ -99,4 +98,4 @@ Próximas implementações
 
 
 ----
-Copyright © 2013-2020 Wellington R. Parra, released under the MIT license
+Copyright © 2013-2022 Wellington R. Parra, released under the MIT license

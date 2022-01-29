@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace Correios.NET.Extensions
@@ -22,6 +23,20 @@ namespace Correios.NET.Extensions
         {
             var separator = new string(SPACE, count);
             return text.Split(new[] { separator }, StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        public static DateTime ExtractDateTime(this string text, string pattern)
+        {
+            var regex = new Regex(pattern);
+            var match = regex.Match(text);
+            if (match.Success)
+            {
+                var matchValue = $"{match.Groups[1]} {match.Groups[2]}";
+                var dateTime = DateTime.ParseExact(matchValue, "dd/MM/yyyy HH:mm", CultureInfo.GetCultureInfo("pt-BR"));
+                return dateTime;
+            }
+
+            return DateTime.MinValue;
         }
     }
 }

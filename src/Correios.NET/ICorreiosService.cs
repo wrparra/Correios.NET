@@ -4,7 +4,7 @@ using Correios.NET.Models;
 
 namespace Correios.NET
 {
-    public interface IServices
+    public interface ICorreiosService
     {
         Task<Package> GetPackageTrackingAsync(string packageCode);
         Package GetPackageTracking(string packageCode);

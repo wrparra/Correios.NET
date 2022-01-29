@@ -12,20 +12,21 @@ namespace Correios.NET.Tests
         private readonly string _packageHtml;
         private readonly string _packageDeliveredHtml;
         private readonly string _addressHtml;
+        private readonly ICorreiosService _services;
 
         public ServicesTest()
         {
             _packageHtml = ResourcesReader.GetResourceAsString("Pacote.html");
             _packageDeliveredHtml = ResourcesReader.GetResourceAsString("PacoteEntregue.html");
             _addressHtml = ResourcesReader.GetResourceAsString("Endereco.html");
+            _services = new CorreiosService();
         }
 
         [Fact]
         public void PackageTrackingService_Live_ShouldReturnCodeAndStatuses()
         {
-            const string packageCode = "QE934006846BR";
-            IServices services = new Services();
-            var result = services.GetPackageTracking(packageCode);
+            const string packageCode = "QJ764113707BR";
+            var result = _services.GetPackageTracking(packageCode);
             result.Code.Should().Be(packageCode);
             result.TrackingHistory.Count.Should().BeGreaterThan(0);
         }
@@ -34,8 +35,7 @@ namespace Correios.NET.Tests
         public void AddressService_Live_ShouldReturnAddress()
         {
             const string zipCode = "15025000";
-            IServices services = new Services();
-            var result = services.GetAddresses(zipCode);
+            var result = _services.GetAddresses(zipCode);
             result.Should().HaveCount(1);
             var resultAddress = result.FirstOrDefault();
             resultAddress.ZipCode.Should().Be(zipCode);
@@ -49,8 +49,7 @@ namespace Correios.NET.Tests
         public async void AddressServiceAsync_Live_ShouldReturnAddress()
         {
             const string zipCode = "15025000";
-            IServices services = new Services();
-            var result = await services.GetAddressesAsync(zipCode);           
+            var result = await _services.GetAddressesAsync(zipCode);           
             result.Should().HaveCount(1);
             var resultAddress = result.FirstOrDefault();
             resultAddress.ZipCode.Should().Be(zipCode);
@@ -64,7 +63,7 @@ namespace Correios.NET.Tests
         public void AddressService_ShouldReturnAddress()
         {
             const string zipCode = "15000010";
-            var services = new Mock<IServices>();
+            var services = new Mock<ICorreiosService>();
             
             services.Setup(s => s.GetAddresses(zipCode))
                 .Returns(Parser.ParseAddresses(_addressHtml));
@@ -82,22 +81,22 @@ namespace Correios.NET.Tests
         [Fact]
         public void PackageTrackingService_ShouldReturnStatuses()
         {
-            const string packageCode = "PZ270541207BR";
-            var services = new Moq.Mock<IServices>();
+            const string packageCode = "OQ293998542BR";
+            var services = new Moq.Mock<ICorreiosService>();
             services.Setup(s => s.GetPackageTracking(packageCode))
                 .Returns(Parser.ParsePackage(_packageHtml));
 
             var result = services.Object.GetPackageTracking(packageCode);
 
             result.Code.Should().Be(packageCode);
-            result.TrackingHistory.Should().HaveCount(9);
+            result.TrackingHistory.Should().HaveCount(4);
         }
 
         [Fact]
         public void PackageTrackingService_ShouldBeDelivered()
         {
-            const string packageCode = "PZ270541207BR";
-            var services = new Moq.Mock<IServices>();
+            const string packageCode = "QJ764113707BR";
+            var services = new Moq.Mock<ICorreiosService>();
             services.Setup(s => s.GetPackageTracking(packageCode))
                 .Returns(Parser.ParsePackage(_packageDeliveredHtml));
 

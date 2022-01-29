@@ -8,10 +8,10 @@ namespace Correios.NET.Api.Controllers
     [Route("encomendas")]
     public class PackageTrackingController : ControllerBase
     {
-        private readonly Correios.NET.IServices _services;
+        private readonly ICorreiosService _services;
         private readonly ILogger<PackageTrackingController> _logger;
 
-        public PackageTrackingController(Correios.NET.IServices services, ILogger<PackageTrackingController> logger)
+        public PackageTrackingController(ICorreiosService services, ILogger<PackageTrackingController> logger)
         {
             _services = services;
             _logger = logger;
@@ -21,7 +21,9 @@ namespace Correios.NET.Api.Controllers
         [HttpGet]
         public async Task<Correios.NET.Models.Package> Get(string code)
         {
-            return await _services.GetPackageTrackingAsync(code);
+            var package = await _services.GetPackageTrackingAsync(code);
+            return package;
+
         }        
     }
 }
