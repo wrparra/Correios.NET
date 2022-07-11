@@ -1,6 +1,6 @@
 using Correios.NET;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args); 
 builder.Services.AddScoped<ICorreiosService, CorreiosService>();
 
 var app = builder.Build();

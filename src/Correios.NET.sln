@@ -19,6 +19,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Folder", "Solution
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Correios.NET.WebApp", "Correios.NET.WebApp\Correios.NET.WebApp.csproj", "{13E6F8A5-2AE4-4361-8DFA-93248F19C654}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correios.NET.ConsoleApp", "Correios.NET.ConsoleApp\Correios.NET.ConsoleApp.csproj", "{79CA6FCA-7662-4230-AC79-0EAAC5257AA5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SampleApps", "SampleApps", "{C1160ECF-0AB4-4660-8CC0-9CE3A319A774}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,9 +41,17 @@ Global
 		{13E6F8A5-2AE4-4361-8DFA-93248F19C654}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13E6F8A5-2AE4-4361-8DFA-93248F19C654}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13E6F8A5-2AE4-4361-8DFA-93248F19C654}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79CA6FCA-7662-4230-AC79-0EAAC5257AA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79CA6FCA-7662-4230-AC79-0EAAC5257AA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79CA6FCA-7662-4230-AC79-0EAAC5257AA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79CA6FCA-7662-4230-AC79-0EAAC5257AA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{13E6F8A5-2AE4-4361-8DFA-93248F19C654} = {C1160ECF-0AB4-4660-8CC0-9CE3A319A774}
+		{79CA6FCA-7662-4230-AC79-0EAAC5257AA5} = {C1160ECF-0AB4-4660-8CC0-9CE3A319A774}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {496BFB6C-7869-44A9-A02A-43E0A0ED04D4}

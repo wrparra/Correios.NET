@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Correios.NET.ConsoleApp": {
+      "commandName": "Project",
+      "hotReloadEnabled": false
+    }
+  }
+}
