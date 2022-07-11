@@ -2,11 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Correios.NET" Version="1.4.2" />
+    <ProjectReference Include="..\Correios.NET\Correios.NET.csproj" />
   </ItemGroup>
-
 
 </Project>
