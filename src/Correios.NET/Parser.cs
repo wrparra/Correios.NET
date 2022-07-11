@@ -104,7 +104,9 @@ namespace Correios.NET
         {
             try
             {
-                var code = document.QuerySelector("#page > main > .sub_header_in > .container > h1").Text().Replace("Rastreamento Correios de Objeto - ", string.Empty);
+                var code = document.QuerySelector("#page > main > .sub_header_in > .container > h1")
+                    .Text()
+                    .Replace("Rastreamento Correios de Objeto - ", string.Empty);
 
                 if (string.IsNullOrEmpty(code))
                     throw new ParseException("Código da encomenda/pacote não foi encontrado.");
