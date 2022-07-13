@@ -7,4 +7,8 @@
     <Nullable>disable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Correios.NET\Correios.NET.csproj" />
+  </ItemGroup>
+
 </Project>
