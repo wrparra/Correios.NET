@@ -25,7 +25,7 @@ namespace Correios.NET.Tests
         [Fact]
         public void PackageTrackingService_Live_ShouldReturnCodeAndStatuses()
         {
-            const string packageCode = "QL589112905BR";
+            const string packageCode = "QP493294019BR";
             var result = _services.GetPackageTracking(packageCode);
             result.Code.Should().Be(packageCode);
             result.TrackingHistory.Count.Should().BeGreaterThan(0);
