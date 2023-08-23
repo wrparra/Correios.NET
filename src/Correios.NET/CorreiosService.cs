@@ -54,7 +54,8 @@ namespace Correios.NET
         public async Task<IEnumerable<Address>> GetAddressesAsync(string zipCode)
         {
             var request = CreateZipCodeRequest(zipCode);
-            var response = await _httpClient.PostAsync(ZIP_ADDRESS_URL, request);
+            _httpClient.DefaultRequestHeaders.Referrer = new System.Uri("https://buscacepinter.correios.com.br/app/endereco/index.php");
+			var response = await _httpClient.PostAsync(ZIP_ADDRESS_URL, request);
 
             var jsonResponse = await response.Content.ReadAsStringAsync();
             var correiosAddressResponse = JsonConvert.DeserializeObject<CorreiosAddresResponse>(jsonResponse);
